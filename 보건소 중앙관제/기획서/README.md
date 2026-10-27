@@ -8,4 +8,6 @@
 
 UI 목업: 상위 폴더 [`../`](../) PNG 6장.
 
+**인터랙티브 프로토타입 (Claude):** [`../프로토타입/`](../프로토타입/README.md) — `VD-IMS 관할기관 현황.html`
+
 **제품 정의:** 지역 단위 백신·의약품 통합 관리(지역 보건 담당자 핵심). VD-IMS 실증(이상반응·자가체크)과의 연계는 별도 매핑 필요 — Project Context [Brief](/cursor/stores/self/docs/bhc-central-control-brief.md).
