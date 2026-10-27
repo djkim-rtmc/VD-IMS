@@ -1,830 +1,154 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>VD-IMS 관할기관 현황</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
-<style>
-/* Layout: VD-IMS 셸(72px 레일 + 72px 헤더) + 컨테이너 최대 1340px 12컬럼 그리드. 토큰·컴포넌트는 RTMC 디자인 시스템(Color/Typography/Button/Controls/Inputs/Dialog/Toast/Pagination) 기준, 시안에 없는 값은 [추가]로 표시 */
-:root{
-  color-scheme:light;
-  /* Color Palette · Grey */
-  --wh:#FFFFFF; --grey100:#F8F9FA; --grey200:#E9ECEF; --grey300:#DEE2E6; --grey400:#CED4DA; --grey500:#ADB5BD; --grey600:#6C757D; --grey700:#495057; --grey800:#343A40; --grey900:#212529; --bk:#000000;
-  /* Color Palette · Brand */
-  --pink100:#FFE6F0; --pink200:#F5B4C8; --pink300:#EB6496; --main-pink:#E62878; --deep-pink:#AA284B;
-  --purple100:#E6E6FF; --purple200:#C8BEFF; --purple300:#7873EB; --main-purple:#373291; --deep-purple:#140F50;
-  /* Color Palette · Sub */
-  --success:#52CD57; --caution:#FDB02F; --error:#E53F3F; --point-purple:#5043D6; --aqua:#6FF7E6;
-  /* [추가] 상태 배경/텍스트 (Sub 컬러의 명도 단계) */
-  --success-bg:#EAFBEC; --success-tx:#2F7A33; --caution-bg:#FFF8EB; --caution-tx:#8A5C00; --error-bg:#FDEDED; --error-tx:#BD2C2C; --info-bg:var(--purple100); --info-tx:var(--main-purple);
-  /* Shadow */
-  --effect01:0 4px 8px rgba(0,0,0,.1); --effect02:0 8px 24px rgba(149,157,165,.2);
-  /* Typography (Spoqa Han Sans Neo · 기본 16px=1rem · 행간 150%) */
-  --font:"Spoqa Han Sans Neo","SpoqaHanSansNeo","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-  /* Grid */
-  --container:1340px; --gutter:20px; --margin:20px;
-
-  /* 프로토타입 공통 별칭 (스크립트에서 사용) */
-  --bg:var(--grey100); --surface:var(--wh); --surface2:var(--grey100); --fg:var(--bk); --muted:var(--grey600); --faint:var(--grey500); --line:var(--grey200); --line2:var(--grey300);
-  --brand:var(--main-pink); --brand-soft:var(--pink100); --brand-fg:var(--wh);
-  --ok:var(--success-tx); --ok-bg:var(--success-bg); --ok-dot:var(--success);
-  --hi:var(--info-tx); --hi-bg:var(--info-bg); --hi-dot:var(--purple300);
-  --warn:var(--caution-tx); --warn-bg:var(--caution-bg); --warn-dot:var(--caution);
-  --dan:var(--error-tx); --dan-bg:var(--error-bg); --dan-dot:var(--error);
-  --off:var(--grey700); --off-bg:var(--grey200); --off-dot:var(--grey500);
-  /* [추가] 지도 행정동 색 (Brand/Sub 100단계 톤) */
-  --m1:#EEF2F7; --m2:#EEECFD; --m3:#EAFBEC; --m4:#FFF8EB; --m5:#FFEEF4; --mstroke:var(--wh); --mapbg:var(--grey100); --maptext:var(--grey700);
-  /* 차트 (Brand 컬러 순서) */
-  --c1:var(--purple300); --c2:var(--pink300); --c3:var(--main-purple); --c4:var(--caution); --c5:var(--success);
-  --p1:var(--grey500); --p2:var(--pink200); --p3:var(--pink300); --p4:var(--main-pink); --p5:var(--deep-pink);
-}
-[hidden]{display:none!important}
-*{box-sizing:border-box}
-html{font-size:16px}
-body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:.875rem;line-height:1.5;margin:0}
-button,select,input{font-family:inherit;font-size:inherit;color:inherit;line-height:1.5}
-button{cursor:pointer}
-:focus-visible{outline:2px solid var(--main-pink);outline-offset:2px}
-.num{font-variant-numeric:tabular-nums}
-
-/* Typography tokens */
-.title-pc03{font-size:1.75rem;font-weight:700}
-.st01{font-size:1.25rem;font-weight:700} .st02{font-size:1.125rem;font-weight:700} .st03{font-size:1rem;font-weight:700}
-.b01{font-size:1.125rem} .b02{font-size:1rem} .b03{font-size:.875rem}
-.l01{font-size:1.25rem;font-weight:500} .l02{font-size:1rem;font-weight:500} .l03{font-size:.75rem;font-weight:500}
-
-/* Header */
-.hdr{background:var(--wh);min-height:72px;padding-block:12px;padding-left:max(28px,env(safe-area-inset-left,0px));padding-right:max(28px,env(safe-area-inset-right,0px));display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.5rem;color:var(--main-pink)}
-.logo svg{width:30px;height:26px}
-.notice{flex:1;min-width:200px;color:var(--grey700);font-size:.875rem;display:flex;gap:8px;align-items:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding-left:60px}
-.notice b{color:var(--bk);font-weight:500}
-.hsel{border:1px solid var(--grey200);background:var(--wh);border-radius:4px;padding:8px 14px;display:flex;gap:10px;align-items:center;font-size:1rem;min-height:42px}
-.hsel strong{font-weight:700}
-.hsel .car{color:var(--main-pink);font-size:.75rem}
-.bell{position:relative;background:none;border:none;padding:6px;color:var(--bk)}
-.bell i{position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--error)}
-
-/* Shell + Grid */
-.shell{display:flex;gap:var(--gutter);padding-block:20px 40px;padding-left:max(var(--margin),env(safe-area-inset-left,0px));padding-right:max(var(--margin),env(safe-area-inset-right,0px));max-width:calc(var(--container) + 72px + var(--gutter) + var(--margin)*2);margin:0 auto}
-.rail{position:sticky;top:20px;align-self:flex-start;width:72px;flex-shrink:0;z-index:30}
-.rail-in{background:var(--wh);border:1px solid var(--grey200);border-radius:8px;padding:12px 0;width:72px;overflow:hidden;transition:width .18s ease,box-shadow .18s}
-.rail:hover .rail-in,.rail:focus-within .rail-in{width:244px;box-shadow:var(--effect02)}
-.r-sec{font-size:.75rem;font-weight:500;color:var(--grey700);white-space:nowrap;text-transform:uppercase;display:flex;gap:4px;align-items:center;height:1px;overflow:hidden;margin:8px 20px;padding:0;background:var(--grey200);color:transparent}
-.r-sec::after{content:"⌄";font-size:.75rem}
-.rail:hover .r-sec,.rail:focus-within .r-sec{height:auto;margin:0;padding:14px 22px 6px;background:none;color:var(--grey700)}
-.r-item span{opacity:0;transition:opacity .12s}
-.rail:hover .r-item span,.rail:focus-within .r-item span{opacity:1}
-.r-item{display:flex;align-items:center;gap:16px;padding:9px 24px;color:var(--bk);white-space:nowrap;border:none;background:none;width:100%;text-align:left;font-size:1rem}
-.r-item svg{width:24px;height:24px;flex-shrink:0;stroke:var(--grey500);fill:none;stroke-width:1.6}
-.r-item:hover{background:var(--grey100)}
-.r-item.on{color:var(--main-pink);font-weight:500}
-.r-item.on svg{stroke:var(--main-pink)}
-.r-new{font-size:.75rem;font-weight:500;background:var(--main-pink);color:var(--wh);border-radius:20px;padding:0 8px;margin-left:auto}
-.main{flex:1;min-width:0;max-width:var(--container);display:flex;flex-direction:column;gap:var(--gutter)}
-
-/* Page head */
-.phead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.crumb{font-size:.75rem;font-weight:500;color:var(--grey600);margin-bottom:4px}
-h1{font-size:1.75rem;line-height:1.5;margin:0;font-weight:700;color:var(--bk);text-wrap:balance;display:flex;align-items:center;gap:8px}
-h1::after{content:"?";width:20px;height:20px;border:1.5px solid var(--grey700);border-radius:50%;font-size:.75rem;font-weight:700;display:inline-flex;align-items:center;justify-content:center;color:var(--grey700)}
-.pdesc{margin:2px 0 0;font-size:.875rem;color:var(--grey700)}
-.asof{font-size:.875rem;color:var(--grey600)}
-.qbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-
-/* Inputs (Text-Field / Select / Search: 48 · padding 12 · Body02_16) */
-.field,.filters select{height:48px;border:1px solid var(--grey400);background:var(--wh);border-radius:8px;padding:0 12px;font-size:1rem;color:var(--bk);min-width:150px}
-.field:hover,.filters select:hover{border-color:var(--grey600)}
-.field:focus,.filters select:focus{outline:none;border:1.5px solid var(--main-pink)}
-.filters select{appearance:none;-webkit-appearance:none;padding-right:40px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='%23495057' stroke-width='1.8'%3E%3Cpath d='M7 10l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;width:100%}
-.filters select.sel{border-color:var(--main-pink);color:var(--main-pink)}
-.search{position:relative;display:inline-flex;align-items:center}
-.search svg{position:absolute;left:12px;width:24px;height:24px;stroke:var(--grey600);fill:none;stroke-width:1.8;pointer-events:none}
-.search .field{padding-left:44px;min-width:260px}
-.flabel{font-size:.75rem;font-weight:500;color:var(--bk)}
-.flabel em{color:var(--main-pink);font-style:normal}
-
-/* Button (Hug type · stroke 1.5px) */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:48px;padding:0 24px;border-radius:8px;border:1.5px solid var(--main-pink);background:var(--main-pink);color:var(--wh);font-size:1rem;font-weight:500;white-space:nowrap;transition:background .12s,border-color .12s}
-.btn:hover{background:var(--deep-pink);border-color:var(--deep-pink)}
-.btn:disabled{background:var(--pink200);border-color:var(--pink200);cursor:not-allowed}
-.btn.ghost{background:var(--wh);color:var(--main-pink)} /* Outline Primary */
-.btn.ghost:hover{background:var(--pink100)}
-.btn.clear{background:none;border-color:transparent;color:var(--main-pink);padding:0 12px}
-.btn.other{background:var(--grey200);border-color:var(--grey200);color:var(--bk)}
-.btn.other:hover{background:var(--grey300);border-color:var(--grey300)}
-.btn.other-ol{background:var(--wh);border-color:var(--grey400);color:var(--bk)}
-.btn.other-ol:hover{background:var(--grey100)}
-.btn.lg{height:60px;padding:0 28px;font-size:1.25rem} /* Button_60 · Label01_20 */
-.btn.sm{height:36px;padding:0 16px;font-size:.875rem;border-radius:6px} /* [추가] Button_36 */
-.ibtn{width:32px;height:32px;border:none;background:none;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;color:var(--bk)}
-.ibtn:hover{background:var(--grey100)}
-.ibtn svg{width:24px;height:24px;stroke:currentColor;stroke-width:1.8;fill:none}
-
-/* Controls (24px): Tag · Chips · Switch */
-.chip{height:32px;border:1px solid var(--main-pink);background:var(--wh);border-radius:20px;padding:0 14px;font-size:.875rem;font-weight:500;color:var(--main-pink);display:inline-flex;gap:6px;align-items:center}
-.chip:hover{background:var(--pink100)}
-.chip.on{background:var(--main-pink);color:var(--wh)}
-.chip i{width:8px;height:8px;border-radius:50%;display:inline-block;box-shadow:0 0 0 1.5px var(--wh)}
-.tag{height:28px;background:var(--pink100);color:var(--main-pink);border-radius:20px;padding:0 6px 0 12px;font-size:.75rem;font-weight:500;display:inline-flex;gap:4px;align-items:center}
-.tag button{border:none;background:none;width:20px;height:20px;padding:0;color:var(--main-pink);font-size:1rem;line-height:1;border-radius:50%}
-.tag button:hover{background:var(--pink200)}
-.tag.grey{background:var(--grey200);color:var(--grey700)}
-.switch{display:inline-flex;gap:8px;align-items:center;font-size:.875rem;font-weight:500;cursor:pointer;user-select:none}
-.switch input{appearance:none;-webkit-appearance:none;width:40px;height:24px;border-radius:12px;background:var(--grey400);position:relative;margin:0;cursor:pointer;transition:background .15s}
-.switch input::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--wh);transition:left .15s}
-.switch input:checked{background:var(--main-pink)}
-.switch input:checked::after{left:19px}
-
-/* Card / Panel */
-.card{background:var(--wh);border:1px solid var(--grey200);border-radius:8px}
-.ctitle{font-size:1.25rem;font-weight:700;margin:0 0 12px;display:flex;align-items:center;gap:8px;color:var(--bk)}
-.ctitle small{font-weight:400;color:var(--grey600);font-size:.875rem}
-.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gutter)}
-.kpi{padding:20px 24px;display:flex;flex-direction:column;gap:2px}
-.kpi .l{font-size:1rem;font-weight:500;color:var(--grey700)}
-.kpi .v{font-size:1.75rem;font-weight:700;color:var(--bk)}
-.kpi .s{font-size:.75rem;font-weight:500;color:var(--grey600);display:flex;gap:10px;flex-wrap:wrap}
-.kpi .s b{font-weight:500}
-.up{color:var(--error)} .down{color:var(--point-purple)}
-
-/* Control grid (12col: 4 / 5 / 3) */
-.ctrl{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,5fr) minmax(0,3fr);gap:var(--gutter);align-items:start}
-.lcol{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:12px}
-.lcol .card{padding:16px}
-.lcol .ctitle{font-size:1rem;margin-bottom:8px}
-.chartbox{position:relative;height:150px}
-.chartbox.tall{height:170px}
-.cmp{display:flex;flex-direction:column;gap:14px;justify-content:center;height:100%}
-.cmp div{display:flex;justify-content:space-between;align-items:baseline;font-size:.875rem;color:var(--grey700)}
-.cmp b{font-size:1.25rem;color:var(--bk)}
-
-/* Map */
-.mapwrap{position:relative;padding:0;overflow:hidden;min-height:600px;display:flex;flex-direction:column}
-.maptool{display:flex;gap:6px;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--grey200);align-items:center}
-.maptool .hint2{margin-left:auto;font-size:.75rem;font-weight:500;color:var(--grey600)}
-.mapstage{position:relative;flex:1;background:var(--mapbg)}
-.mapstage svg{width:100%;height:100%;display:block;min-height:530px}
-.dong{stroke:var(--mstroke);stroke-width:3}
-.dlabel{font-size:13px;fill:var(--maptext);font-weight:500;pointer-events:none}
-.mk{cursor:pointer;transition:opacity .15s}
-.mk.dim{opacity:.18}
-.mk circle.ring{fill:none;stroke-width:2}
-.legend{position:absolute;left:12px;bottom:12px;background:var(--wh);border:1px solid var(--grey200);border-radius:8px;padding:10px 12px;font-size:.75rem;color:var(--grey700);display:flex;flex-direction:column;gap:4px;box-shadow:var(--effect01)}
-.legend span{display:flex;align-items:center;gap:6px}
-.legend i{width:10px;height:10px;border-radius:50%}
-.edge{position:absolute;font-size:.875rem;color:var(--grey500);pointer-events:none}
-.pop{position:absolute;z-index:5;width:300px;background:var(--wh);border:1px solid var(--grey200);border-radius:8px;box-shadow:var(--effect02);padding:16px}
-.pop h4{margin:0;font-size:1rem;display:flex;align-items:center;gap:6px}
-.pop .sub{font-size:.75rem;color:var(--grey600);margin:2px 0 10px}
-.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:5px 14px;border:1px solid var(--grey200);border-radius:8px;padding:10px 12px;font-size:.75rem;margin-bottom:12px}
-.pgrid div{display:flex;justify-content:space-between;color:var(--grey600)}
-.pgrid b{color:var(--bk);font-weight:500}
-.pgrid b.r{color:var(--error)}
-
-/* Alerts (Toast 카드 형식 차용) */
-.alerts{display:flex;flex-direction:column;gap:10px}
-.ahead{display:flex;justify-content:space-between;align-items:center}
-.al{padding:14px 16px;border-radius:8px;background:var(--wh);border:1px solid var(--grey200);cursor:pointer;text-align:left;width:100%}
-.al:hover{box-shadow:var(--effect01)}
-.al .t{display:flex;align-items:center;gap:8px;font-weight:500;font-size:1rem}
-.al .t time{margin-left:auto;font-weight:500;font-size:.75rem;color:var(--grey600)}
-.al p{margin:6px 0 0;font-size:.75rem;font-weight:500;color:var(--grey700)}
-.lv{font-size:.75rem;font-weight:500;padding:1px 8px;border-radius:20px}
-.lv.u{background:var(--error);color:var(--wh)} .lv.w{background:var(--caution);color:var(--bk)} .lv.c{background:var(--grey200);color:var(--grey700)}
-
-/* [추가] 상태 배지 */
-.badge{height:24px;font-size:.75rem;font-weight:500;padding:0 10px;border-radius:20px;white-space:nowrap;display:inline-flex;gap:4px;align-items:center}
-.s-normal{background:var(--ok-bg);color:var(--ok)} .s-high{background:var(--hi-bg);color:var(--hi)} .s-warning{background:var(--warn-bg);color:var(--warn)} .s-danger{background:var(--dan-bg);color:var(--dan)} .s-inactive{background:var(--off-bg);color:var(--off)}
-
-/* Filters */
-.filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gutter);padding:20px 24px}
-.filters label{display:flex;flex-direction:column;gap:6px;font-size:.75rem;font-weight:500;color:var(--bk)}
-.selrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 24px;border-top:1px solid var(--grey200);min-height:56px}
-.selrow b{font-size:1rem;font-weight:700;margin-right:6px}
-
-/* Table */
-.sec{padding:24px 28px}
-.split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--gutter)}
-.tw{overflow-x:auto;border-top:1.5px solid var(--grey700)}
-table{width:100%;border-collapse:collapse;font-size:.875rem}
-th{background:var(--grey100);color:var(--bk);font-weight:700;text-align:center;padding:13px 12px;border-bottom:1px solid var(--grey300);white-space:nowrap}
-td{padding:12px;border-bottom:1px solid var(--grey200);text-align:center;white-space:nowrap;color:var(--bk)}
-tbody tr.click{cursor:pointer}
-tbody tr.click:hover td{background:var(--pink100)}
-td.l{text-align:left} td.trunc{max-width:300px;overflow:hidden;text-overflow:ellipsis;text-align:left}
-td.red{color:var(--error);font-weight:700}
-.sub-row td{background:var(--grey100);font-size:.875rem}
-.sub-row .k{display:block;font-size:.75rem;font-weight:500;color:var(--grey600)}
-.pain{display:inline-flex;align-items:center;justify-content:center;width:26px;height:24px;border-radius:6px;font-weight:700;font-size:.75rem;color:var(--wh)}
-.tabs{display:flex;gap:0;border-bottom:1px solid var(--grey300);margin-bottom:16px}
-.tab{border:none;background:none;padding:14px 24px;color:var(--grey500);font-size:1.25rem;font-weight:700;border-bottom:2px solid transparent;margin-bottom:-1px}
-.tab:hover{color:var(--grey700)}
-.tab.on{color:var(--main-pink);border-bottom-color:var(--main-pink)}
-.empty{padding:28px;text-align:center;color:var(--grey600)}
-.lnk{border:none;background:none;color:var(--grey700);font-size:.875rem;font-weight:500}
-.lnk:hover{color:var(--main-pink)}
-
-/* Pagination */
-.pg{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:16px;position:relative;flex-wrap:wrap}
-.pg button{min-width:32px;height:32px;border:1px solid transparent;background:none;border-radius:6px;font-size:.875rem;color:var(--grey700);padding:0 6px}
-.pg button:hover:not(:disabled){background:var(--grey100)}
-.pg button.on{border-color:var(--main-pink);color:var(--main-pink);font-weight:700}
-.pg button:disabled{color:var(--grey400);cursor:default}
-.pg .dots{color:var(--grey500);padding:0 4px}
-.pg select{position:absolute;right:0;height:32px;border:1px solid var(--grey400);border-radius:6px;padding:0 8px;font-size:.75rem;background:var(--wh)}
-
-/* Dialog · Active Modal (M: 840px · max 90vw · max-height 90vh · min-height 400 · dim #000 40%) */
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
-.modal{background:var(--wh);border-radius:8px;width:840px;max-width:90vw;max-height:90vh;min-height:400px;display:flex;flex-direction:column;box-shadow:var(--effect02)}
-.mhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:28px 32px 0}
-.mhead h3{margin:0;font-size:1.75rem;line-height:1.5;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.mhead p{margin:2px 0 0;font-size:1rem;color:var(--grey700)}
-.mbody{padding:16px 32px 8px;overflow-y:auto;flex:1;min-height:0}
-.mfoot{display:flex;justify-content:flex-end;gap:8px;padding:16px 32px 28px;border-top:1px solid var(--grey200)}
-.mkpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:16px 0 18px}
-.mkpi div{border:1px solid var(--grey200);border-radius:8px;padding:12px 16px}
-.mkpi span{font-size:.875rem;font-weight:500;color:var(--grey700)} .mkpi b{display:block;font-size:1.5rem}
-.modal .tab{font-size:1.125rem;padding:12px 20px}
-.info{display:grid;grid-template-columns:1fr 1fr;gap:0 32px;font-size:1rem}
-.info div{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--grey200);gap:10px}
-.info span{color:var(--grey600)} .info b{font-weight:500;text-align:right}
-.note{display:flex;gap:8px;font-size:.875rem;color:var(--grey700);margin-top:12px;align-items:flex-start}
-.note i{flex-shrink:0;width:20px;height:20px;border-radius:50%;font-style:normal;font-size:.75rem;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
-.stk{border:1px solid var(--grey200);border-radius:8px;padding:16px 18px;margin-bottom:12px}
-.stk .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.stk .top b{font-size:1.125rem} .stk .top .q{font-size:1.25rem;font-weight:700}
-.stk .meta{font-size:.75rem;font-weight:500;color:var(--grey600);margin:2px 0 8px}
-.bar{position:relative;height:12px;background:var(--grey200);border-radius:6px;margin:20px 0 4px}
-.bar .f{height:100%;border-radius:6px}
-.bar .tk{position:absolute;top:-19px;font-size:.75rem;color:var(--grey600);transform:translateX(-50%)}
-.bar .ln{position:absolute;top:-3px;bottom:-3px;width:0;border-left:1.5px dashed var(--grey600)}
-.lots{margin-top:12px;display:flex;flex-direction:column;gap:6px}
-.lot{display:grid;grid-template-columns:1.2fr 1fr .6fr auto;gap:8px;align-items:center;background:var(--grey100);border-radius:8px;padding:10px 14px;font-size:.875rem}
-.lot .k{display:block;font-size:.75rem;font-weight:500;color:var(--grey600)}
-.dday{font-weight:700;font-size:.75rem;padding:2px 10px;border-radius:20px}
-
-/* Toast (상단 · min 320 · max 432 · Effect01) */
-.toast{position:fixed;left:50%;top:max(24px,env(safe-area-inset-top,0px));transform:translateX(-50%);min-width:320px;max-width:min(432px,calc(100vw - 32px));background:var(--wh);border-radius:8px;box-shadow:var(--effect01),0 0 0 1px var(--grey200);padding:12px 12px 12px 16px;display:flex;gap:10px;align-items:flex-start;z-index:200;animation:tin .25s ease}
-.toast .dot{width:12px;height:12px;border-radius:50%;margin-top:6px;flex-shrink:0}
-.toast b{display:block;font-size:1rem;font-weight:500}
-.toast p{margin:0;font-size:.75rem;font-weight:500;color:var(--grey600)}
-.toast .ibtn{margin-left:auto;width:24px;height:24px}
-.toast .ibtn svg{width:16px;height:16px}
-@keyframes tin{from{transform:translate(-50%,-12px);opacity:0}to{transform:translate(-50%,0);opacity:1}}
-
-/* Sub navigation (관할 관리) */
-.subnav{display:flex;gap:0;background:var(--wh);border:1px solid var(--grey200);border-radius:8px;padding:0 12px;overflow-x:auto}
-.subnav button{border:none;background:none;padding:16px 18px;color:var(--grey500);font-weight:700;font-size:1rem;display:inline-flex;gap:6px;align-items:center;border-bottom:2px solid transparent;white-space:nowrap}
-.subnav button:hover{color:var(--grey700)}
-.subnav button.on{color:var(--main-pink);border-bottom-color:var(--main-pink)}
-.subnav .cnt{font-size:.75rem;font-weight:500;border-radius:20px;padding:0 7px;background:var(--error);color:var(--wh)}
-.listbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
-.seg{display:flex;gap:6px;flex-wrap:wrap}
-th.sort{cursor:pointer;user-select:none}
-th.sort:hover,th.sort.on{color:var(--main-pink)}
-.hint{font-size:.75rem;font-weight:500;color:var(--grey600);margin:10px 0 0}
-.bar-in{display:inline-block;width:64px;height:6px;background:var(--grey200);border-radius:4px;vertical-align:middle;margin-right:6px;overflow:hidden}
-.bar-in i{display:block;height:100%}
-
-/* Responsive Layout Grid: Desktop ≥1121 · Tablet 721~1120 (margin 32) · Mobile ≤720 (margin 20) */
-@media (max-width:1440px){.ctrl{grid-template-columns:minmax(0,8fr) minmax(0,4fr)} .lcol{grid-column:1 / -1;grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media (max-width:1120px){:root{--margin:32px;--gutter:16px} .ctrl{grid-template-columns:minmax(0,1fr)} .lcol{grid-template-columns:repeat(2,minmax(0,1fr))} .split{grid-template-columns:minmax(0,1fr)} .kpis{grid-template-columns:repeat(2,minmax(0,1fr))} .filters{grid-template-columns:repeat(2,minmax(0,1fr))} .notice{padding-left:0} .rail{display:none}}
-@media (max-width:720px){:root{--margin:20px} .notice{display:none} .hdr{padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))} h1{font-size:1.5rem} .lcol{grid-template-columns:minmax(0,1fr)} .mkpi{grid-template-columns:repeat(2,minmax(0,1fr))} .info{grid-template-columns:1fr} .filters{grid-template-columns:1fr;padding:16px} .sec{padding:20px 16px} .mapwrap{min-height:420px} .mapstage svg{min-height:380px} .mhead,.mbody,.mfoot{padding-left:20px;padding-right:20px} .mhead h3{font-size:1.25rem} .tab{padding:12px 14px;font-size:1rem} .search .field{min-width:0;width:100%} .pg select{position:static}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-</style>
-
-<header class="hdr">
-  <div class="logo"><svg viewBox="0 0 28 24" aria-hidden="true"><path d="M2 3c3 0 5 2 7 6l5 10 5-10c2-4 4-6 7-6" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg>VD-IMS</div>
-  <div class="notice"><span aria-hidden="true">📢</span><b>[공지]</b> 10월 25일(일) 02:00~04:00 서버 점검으로 서비스 이용이 일시 중단됩니다.</div>
-  <button class="bell" aria-label="알림 4건"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><i></i></button>
-  <div class="hsel"><span style="font-size:11px;color:var(--muted)">KR</span> 한국어 <span class="car">⌄</span></div>
-  <div class="hsel"><strong>남동구보건소</strong> 예방접종 담당자 <span class="car">⌄</span></div>
-</header>
-
-<div class="shell">
-  <nav class="rail" aria-label="주 메뉴"><div class="rail-in" id="rail"></div></nav>
-
-  <main class="main">
-    <nav class="subnav" id="subnav" aria-label="관할 관리 메뉴"></nav>
-    <div class="phead">
-      <div>
-        <div class="crumb" id="pcrumb">관할 관리 · 남동구보건소</div>
-        <h1 id="ptitle">인천 남동구 관할기관 현황</h1>
-        <p class="pdesc" id="pdesc"></p>
-      </div>
-      <div class="qbar">
-        <input class="field" id="d1" type="date" value="2026-10-15" aria-label="시작일">
-        <span style="color:var(--faint)">~</span>
-        <input class="field" id="d2" type="date" value="2026-10-21" aria-label="종료일">
-        <button class="btn" id="qbtn">조회</button>
-        <span class="asof num" id="asof">2026년 10월 21일 16:40 기준</span>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>관할기관 현황 · VD-IMS</title>
+  <link rel="stylesheet" href="prototype-common.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="rail" aria-label="주 메뉴">
+      <div class="rail-logo">VD</div>
+      <nav class="rail-nav">
+        <a class="rail-link" href="통합-대시보드.html"><span class="rail-icon">📊</span>통합<br />대시보드</a>
+        <a class="rail-link active" href="VD-IMS%20관할기관%20현황.html"><span class="rail-icon">🏥</span>관할<br />기관</a>
+        <a class="rail-link" href="재고-관리.html"><span class="rail-icon">💉</span>재고<br />관리</a>
+        <a class="rail-link" href="이상반응-관리.html"><span class="rail-icon">⚠️</span>이상<br />반응</a>
+        <a class="rail-link" href="알림-조치-관리.html"><span class="rail-icon">🔔</span>알림<br />조치</a>
+      </nav>
+    </aside>
+    <div class="main-wrap">
+      <header class="top-header">
+        <div class="header-title">VD-IMS <span>/ 관할기관 현황</span></div>
+        <div class="header-search"><input type="search" placeholder="기관명 검색" /></div>
+        <div class="header-actions">
+          <div class="header-badge"><span>🔔</span><span class="dot"></span></div>
+          <div class="user-chip"><span class="avatar">김</span><div><strong>김보건</strong><br /><span style="color:var(--rtmc-muted);font-size:11px">남동구보건소</span></div></div>
+        </div>
+      </header>
+      <main class="page-content">
+        <div class="page-head">
+          <div>
+            <h1>관할기관 현황</h1>
+            <p class="sub">위탁의료기관 25곳 · 실시간 연동 상태·접종·재고·자가체크 응답률</p>
+          </div>
+          <a class="btn btn-secondary btn-sm" href="통합-대시보드.html">통합 대시보드</a>
+        </div>
+        <nav class="subnav" aria-label="관할기관 하위 메뉴">
+          <a href="#panel-overview" class="active" data-sub="panel-overview">관할기관 현황</a>
+          <a href="#panel-list" data-sub="panel-list">기관 목록</a>
+          <a href="#panel-vax" data-sub="panel-vax">접종</a>
+          <a href="#panel-stock" data-sub="panel-stock">재고</a>
+          <a href="#panel-expiry" data-sub="panel-expiry">유효기한</a>
+          <a href="#panel-ae" data-sub="panel-ae">이상반응</a>
+        </nav>
+        <div id="panel-overview" class="sub-panel">
+          <div class="kpi-row">
+            <div class="kpi-card"><div class="label">연동 정상</div><div class="value">23</div></div>
+            <div class="kpi-card"><div class="label">데이터 지연</div><div class="value">2</div></div>
+            <div class="kpi-card"><div class="label">금일 접종 합계</div><div class="value">842</div></div>
+            <div class="kpi-card"><div class="label">재고 경고</div><div class="value">3</div></div>
+          </div>
+          <div class="grid-2-1">
+            <div class="card">
+              <div class="card-head"><h2>관할 지도</h2></div>
+              <div class="card-body"><div class="map-placeholder">남동구 관할 · 클릭 시 기관 상세<div class="map-pin ok" style="left:40%;top:50%"></div></div></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h2>주의 기관</h2></div>
+              <div class="card-body">
+                <ul class="alert-list">
+                  <li><span class="tag tag-danger">부족</span> 구립○○병원</li>
+                  <li><span class="tag tag-warning">임박</span> △△의원</li>
+                  <li><span class="tag tag-warning">미응답</span> ○○내과 · 자가체크 48h</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="panel-list" class="sub-panel" hidden>
+          <div class="filter-bar">
+            <div class="filter-group"><label>상태</label><select><option>전체</option><option>연동 정상</option><option>지연</option></select></div>
+            <div class="filter-group"><label>유형</label><select><option>위탁의료</option><option>보건소</option></select></div>
+          </div>
+          <div class="card">
+            <div class="card-body" style="padding:0;overflow:auto">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>기관명</th><th>유형</th><th>연동</th><th>금일 접종</th><th>재고(도즈)</th><th>자가체크 응답률</th><th>이상반응(7일)</th><th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>남동구보건소</td><td>보건소</td><td><span class="tag tag-success">정상</span></td><td>124</td><td>12,400</td><td>94.2%</td><td>2</td>
+                    <td><button type="button" class="btn btn-ghost btn-sm" data-open-modal="#modalOrg">요약</button> <a class="btn btn-primary btn-sm" href="기관-상세.html">상세</a></td>
+                  </tr>
+                  <tr>
+                    <td>○○내과의원</td><td>위탁</td><td><span class="tag tag-success">정상</span></td><td>38</td><td>420</td><td>88.1%</td><td>4</td>
+                    <td><button type="button" class="btn btn-ghost btn-sm" data-open-modal="#modalOrg">요약</button> <a class="btn btn-primary btn-sm" href="기관-상세.html">상세</a></td>
+                  </tr>
+                  <tr>
+                    <td>구립○○병원</td><td>위탁</td><td><span class="tag tag-warning">지연</span></td><td>52</td><td>85</td><td>91.0%</td><td>1</td>
+                    <td><a class="btn btn-primary btn-sm" href="기관-상세.html">상세</a></td>
+                  </tr>
+                  <tr>
+                    <td>△△가정의학과</td><td>위탁</td><td><span class="tag tag-success">정상</span></td><td>29</td><td>1,850</td><td>93.5%</td><td>0</td>
+                    <td><a class="btn btn-primary btn-sm" href="기관-상세.html">상세</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="panel-vax" class="sub-panel" hidden>
+          <div class="card"><div class="card-head"><h2>관할 접종 추이</h2></div><div class="card-body"><div class="chart-box tall"><canvas id="chartOrgVax"></canvas></div></div></div>
+        </div>
+        <div id="panel-stock" class="sub-panel" hidden>
+          <p style="margin-bottom:12px"><a href="재고-관리.html">재고 관리 허브 →</a></p>
+          <div class="card"><div class="card-body"><table class="data-table"><thead><tr><th>기관</th><th>백신</th><th>재고</th><th>예상 소진</th><th>상태</th></tr></thead><tbody><tr><td>구립○○병원</td><td>HPV</td><td>85</td><td>D+4</td><td><span class="tag tag-danger">부족</span></td></tr><tr><td>△△의원</td><td>HPV</td><td>1,250</td><td>D+45</td><td><span class="tag tag-success">여유</span></td></tr></tbody></table></div></div>
+        </div>
+        <div id="panel-expiry" class="sub-panel" hidden>
+          <div class="card"><div class="card-body"><table class="data-table"><thead><tr><th>기관</th><th>로트</th><th>유효기한</th><th>잔량</th></tr></thead><tbody><tr><td>△△의원</td><td>L-HPV-042</td><td>2026-06-12</td><td>120</td></tr></tbody></table></div></div>
+        </div>
+        <div id="panel-ae" class="sub-panel" hidden>
+          <p style="margin-bottom:12px"><a href="이상반응-관리.html">이상반응 관리 전체 화면 →</a></p>
+          <div class="card"><div class="card-body"><table class="data-table"><thead><tr><th>기관</th><th>증상</th><th>심각도(의료진 참고)</th><th>자가체크</th><th>KOI 상담 상태</th></tr></thead><tbody><tr><td>○○내과</td><td>두통·근육통</td><td><span class="tag tag-muted">참고 분류 B</span></td><td>3·48h 응답</td><td><span class="tag tag-primary">예약확정</span></td></tr></tbody></table></div></div>
+        </div>
+      </main>
+      <footer class="page-footer"><span>갱신 2026-05-18 10:30</span><span>© RTMC VD-IMS</span></footer>
+    </div>
+  </div>
+  <div class="modal-overlay" id="modalOrg" role="dialog" aria-labelledby="modalOrgTitle">
+    <div class="modal">
+      <div class="modal-head"><h2 id="modalOrgTitle">○○내과의원 · 요약</h2><button type="button" class="btn btn-ghost btn-sm" data-close-modal>닫기</button></div>
+      <div class="modal-body">
+        <p>금일 접종 38 · HPV 재고 420 도즈 · 자가체크 응답률 88.1%</p>
+        <p style="margin-top:12px"><a href="기관-상세.html">기관 상세 페이지로 이동 →</a></p>
       </div>
     </div>
-
-    <section class="kpis" id="kpis" data-view="overview"></section>
-    <section class="kpis" id="subkpi" hidden></section>
-
-    <section class="ctrl" data-view="overview">
-      <div class="lcol">
-        <div class="card"><h2 class="ctitle">예방접종자 추이 <small>월별</small></h2><div class="chartbox"><canvas id="cTrend" aria-label="월별 예방접종자 추이 2026년과 2025년 비교"></canvas></div></div>
-        <div class="card"><div class="cmp num">
-          <div>최근 1주일<b>1,284명</b></div>
-          <div>전월 대비<b class="down">▼ 96명</b></div>
-          <div>전년 대비<b class="up">▲ 141명</b></div>
-        </div></div>
-        <div class="card"><h2 class="ctitle">연령대별 접종 현황</h2><div class="chartbox tall"><canvas id="cAge" aria-label="연령대별 접종자 수"></canvas></div></div>
-        <div class="card"><h2 class="ctitle">성별 접종 현황</h2><div class="chartbox tall"><canvas id="cSex" aria-label="성별 접종 비율"></canvas></div></div>
-        <div class="card"><h2 class="ctitle">감염병별 이상반응 건수</h2><div class="chartbox tall"><canvas id="cDis" aria-label="감염병별 이상반응 건수"></canvas></div></div>
-        <div class="card"><h2 class="ctitle">통증별 분포 <small>1~5점</small></h2><div class="chartbox tall"><canvas id="cPain" aria-label="통증 점수 분포"></canvas></div></div>
-      </div>
-
-      <div class="card mapwrap">
-        <div class="maptool" id="mapf" role="group" aria-label="지도 필터"></div>
-        <div class="mapstage" id="stage">
-          <span class="edge" style="left:14px;top:12px">부평구</span>
-          <span class="edge" style="right:14px;top:12px">계양구 방향</span>
-          <span class="edge" style="right:14px;bottom:14px">연수구</span>
-          <svg id="map" viewBox="0 0 640 590" role="img" aria-label="남동구 행정동 지도와 위탁의료기관 위치"></svg>
-          <div class="legend" id="legend"></div>
-          <div class="pop" id="pop" hidden></div>
-        </div>
-      </div>
-
-      <aside class="alerts" aria-label="주요 알림">
-        <div class="ahead"><h2 class="ctitle" style="margin:0">주요 알림</h2><span class="lv u" id="acnt"></span></div>
-        <div id="alist" class="alerts"></div>
-      </aside>
-    </section>
-
-    <section class="card" id="filterCard" hidden>
-      <div class="filters">
-        <label for="fDong">지역(행정동)<select id="fDong"></select></label>
-        <label for="fOrg">기관<select id="fOrg"></select></label>
-        <label for="fDis">감염병<select id="fDis"></select></label>
-        <label for="fVac">백신<select id="fVac"></select></label>
-      </div>
-      <div class="selrow" id="selrow"></div>
-    </section>
-
-    <section class="card sec" data-view="orgs">
-      <div class="listbar">
-        <h2 class="ctitle" style="margin:0">관할 위탁의료기관 <small id="ocnt"></small></h2>
-        <div class="qbar">
-          <div class="seg" id="ostat" role="group" aria-label="종합 상태"></div>
-          <label class="switch" for="oIssue"><input type="checkbox" id="oIssue">이상 지표 기관만</label>
-          <span class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg><input class="field" id="oq" type="search" placeholder="기관명 · 담당자 검색" aria-label="기관 검색"></span>
-        </div>
-      </div>
-      <div class="tw"><table><thead><tr id="ohead"></tr></thead><tbody id="tOrgs"></tbody></table></div>
-      <div class="pg" id="pg-orgs"></div>
-      <p class="hint">열 제목을 누르면 정렬됩니다. 행을 누르면 기관 상세가 열립니다.</p>
-    </section>
-
-    <section class="card sec" data-view="vacc">
-      <h2 class="ctitle">접종현황 <small id="vday">2026년 10월 21일 · 시간대별</small></h2>
-      <div class="split">
-        <div class="chartbox" style="height:260px"><canvas id="cHour" aria-label="시간대별 접종량"></canvas></div>
-        <div class="tw"><table><thead><tr><th>기관</th><th>행정동</th><th>금일 접종</th><th>누적 접종</th><th>상태</th></tr></thead><tbody id="tVacc"></tbody></table></div>
-      </div>
-      <h3 class="ctitle" style="margin-top:18px">접종상세 <small id="dcnt"></small></h3>
-      <div class="tw"><table><thead><tr><th>접종일시</th><th>기관</th><th>감염병</th><th>백신</th><th>로트번호</th><th>유효기한</th><th>피접종자</th><th>성별</th></tr></thead><tbody id="tDetail"></tbody></table></div>
-      <div class="pg" id="pg-detail"></div>
-    </section>
-
-    <section class="card sec" data-view="stock">
-      <h2 class="ctitle">재고현황 <small>행을 눌러 로트별 잔여수량 확인</small></h2>
-      <div class="tw"><table><thead><tr><th>기관</th><th>감염병</th><th>백신</th><th>잔여 재고</th><th>안전/적정</th><th>상태</th><th>상세</th></tr></thead><tbody id="tStock"></tbody></table></div>
-      <div class="pg" id="pg-stock"></div>
-    </section>
-
-    <section class="card sec" data-view="expiry">
-      <h2 class="ctitle">유효기한 임박 <small>30일 이내 만료 및 만료 미폐기</small></h2>
-      <div class="tw"><table><thead><tr><th>기관</th><th>감염병</th><th>백신</th><th>제조사</th><th>로트번호</th><th>유효기한</th><th>잔여수량</th><th>D-day</th></tr></thead><tbody id="tExp"></tbody></table></div>
-      <div class="pg" id="pg-exp"></div>
-    </section>
-
-    <section class="card sec" data-view="adverse">
-      <h2 class="ctitle">기관별 이상반응 접수 <small>상위 10개 기관 · 중증 의심 포함</small></h2>
-      <div class="chartbox" style="height:240px;margin-bottom:18px"><canvas id="cAdvOrg" aria-label="기관별 이상반응 접수 건수"></canvas></div>
-      <h2 class="ctitle">주요 이상반응</h2>
-      <div class="tabs" role="tablist" id="advTabs"></div>
-      <div class="tw"><table><thead><tr><th>접종일</th><th>기관</th><th>감염병</th><th>백신</th><th>로트번호</th><th>성별/연령</th><th>구분</th><th>증상</th><th>통증정도</th></tr></thead><tbody id="tAdv"></tbody></table></div>
-      <div class="pg" id="pg-adv"></div>
-    </section>
-  </main>
-</div>
-
-<div class="ov" id="ov" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle" id="modal"></div></div>
-<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script>
-(function(){
-"use strict";
-const TODAY=new Date("2026-10-21");
-let VIEW="overview";
-const $=s=>document.querySelector(s);
-const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const fmt=n=>n.toLocaleString("ko-KR");
-const dd=s=>Math.round((new Date(s)-TODAY)/864e5);
-
-/* ── 사이드바: VD-IMS 기존 메뉴 + 신규 관할 관리 ── */
-const ICON={home:'<path d="M4 11l8-7 8 7v9H4z"/>',chart:'<path d="M4 19l5-6 4 3 7-9"/><path d="M4 4v16h16"/>',box:'<rect x="4" y="5" width="16" height="4"/><path d="M5 9v10h14V9M10 13h4"/>',list:'<path d="M9 7h11M9 12h11M9 17h11M4 7l1 1 2-2M4 12l1 1 2-2"/>',add:'<path d="M4 20V4h16v16zM8 16v-4M12 16V9M16 16v-6"/>',syr:'<path d="M14 4l6 6M17 7l-9 9-3 1 1-3 9-9M9 12l3 3"/>',bp:'<path d="M3 16l4-5 3 3 4-6 3 4h4"/><circle cx="18" cy="18" r="2"/>',bar:'<path d="M6 20V10M12 20V4M18 20v-7"/>',edit:'<path d="M4 20h4l10-10-4-4L4 16z"/>',clip:'<rect x="5" y="4" width="14" height="17" rx="1"/><path d="M9 4h6v3H9z"/>',med:'<rect x="6" y="8" width="12" height="13" rx="1"/><path d="M8 4h8v4H8zM12 11v6M9 14h6"/>',rcpt:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6"/>',cal:'<rect x="4" y="5" width="16" height="15" rx="1"/><path d="M4 10h16M9 3v4M15 3v4"/>',tool:'<path d="M14 6a4 4 0 0 0 5 5l-9 9-4-4 9-9z"/>',help:'<circle cx="12" cy="12" r="9"/><path d="M10 9a2 2 0 1 1 3 2c-1 .5-1 1-1 2M12 16v.5"/>',video:'<rect x="3" y="7" width="13" height="10" rx="1"/><path d="M16 11l5-3v8l-5-3"/>',map:'<path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/>'};
-const MENU=[["","홈","home"],["VACCINE-MANAGEMENT"],["","재고 현황","chart"],["","재고 관리","box"],["","사용 내역","list"],["MONITORING"],["","전체 접종 현황","add"],["","백신 접종 내역","syr"],["","이상반응 현황","bp"],["","자가체크 내역","bar"],["","일지 관리","edit"],["REGION MANAGEMENT · 보건소"],["v:overview","관할기관 현황","map","NEW"],["v:orgs","관할기관 목록","hosp"],["v:vacc","기관별 접종현황","syr"],["v:stock","기관별 재고현황","box"],["v:expiry","유효기한 임박","cal"],["v:adverse","기관별 이상반응","bp"],["INTEGRATED VACCINATION"],["","자동 등록","clip"],["ORDER MANAGEMENT"],["","상품 관리","med"],["","발주 관리","rcpt"],["","유효기간 임박","cal"],["SUPPORT"],["","계정 관리","tool"],["","고객 지원센터","help"],["REMOTE-CARE"],["","비대면 상담","video"]];
-ICON.hosp='<path d="M4 21V7l8-4 8 4v14z"/><path d="M12 9v6M9 12h6M9 21v-3h6v3"/>';
-function renderRail(){
-  $("#rail").innerHTML=MENU.map(m=>{if(m.length===1)return`<div class="r-sec">${m[0]}</div>`;
-    const v=m[0].startsWith("v:")?m[0].slice(2):"";const on=v&&v===VIEW;
-    return `<button class="r-item ${on?"on":""}" ${v?`data-view="${v}"`:"data-legacy=\"1\""} ${on?'aria-current="page"':''}><svg viewBox="0 0 24 24">${ICON[m[2]]}</svg><span>${m[1]}</span>${m[3]?`<span class="r-new">${m[3]}</span>`:""}</button>`}).join("");
-}
-$("#rail").addEventListener("click",e=>{const b=e.target.closest(".r-item");if(!b)return;if(b.dataset.view)setView(b.dataset.view);else toast("기존 VD-IMS 메뉴",`'${b.innerText.trim()}'은(는) 이번 프로토타입 범위 밖입니다`,"warn")});
-
-/* ── 지도: 남동구 행정동 (목업 경계, 추후 카카오/네이버 지도 교체) ── */
-const DONGS=[
- ["간석4동",1,[[150,60],[240,40],[268,110],[210,150],[140,128]]],
- ["간석3동",1,[[52,150],[140,128],[160,212],[92,244],[40,200]]],
- ["간석2동",1,[[140,128],[210,150],[232,222],[160,232],[160,212]]],
- ["간석1동",1,[[92,244],[160,212],[160,232],[232,222],[222,300],[118,312]]],
- ["구월4동",2,[[240,40],[330,58],[332,150],[270,150],[268,110]]],
- ["구월3동",2,[[270,150],[332,150],[342,232],[282,242],[232,222],[210,150]]],
- ["구월2동",2,[[222,300],[232,222],[282,242],[272,322]]],
- ["구월1동",2,[[282,242],[342,232],[350,330],[272,322]]],
- ["만수1동",3,[[330,58],[420,30],[440,112],[360,130],[332,150]]],
- ["만수2동",3,[[420,30],[522,62],[512,132],[440,112]]],
- ["만수3동",3,[[360,130],[440,112],[452,192],[370,202],[342,232],[332,150]]],
- ["만수4동",3,[[440,112],[512,132],[546,212],[452,192]]],
- ["만수5동",3,[[370,202],[452,192],[462,262],[382,272]]],
- ["만수6동",3,[[342,232],[370,202],[382,272],[462,262],[442,330],[350,330]]],
- ["남촌도림동",4,[[118,312],[222,300],[232,402],[150,432],[96,382]]],
- ["논현1동",4,[[222,300],[272,322],[292,402],[232,402]]],
- ["논현2동",4,[[272,322],[350,330],[362,422],[292,402]]],
- ["논현고잔동",4,[[150,432],[232,402],[292,402],[362,422],[332,522],[222,548],[168,492]]],
- ["장수서창동",5,[[350,330],[442,330],[462,262],[546,212],[566,302],[492,382],[362,422]]],
- ["서창2동",5,[[362,422],[492,382],[546,442],[474,522],[402,502],[332,522]]],
-];
-const cen=p=>[p.reduce((a,b)=>a+b[0],0)/p.length,p.reduce((a,b)=>a+b[1],0)/p.length];
-const DC={};DONGS.forEach(d=>DC[d[0]]=cen(d[2]));
-
-/* ── 백신 마스터 (프로젝트 백신리스트 기준) ── */
-const VACS=[
- {dis:"인플루엔자",vac:"보령플루V테트라백신주",mf:"(주)보령바이오파마",lp:"FL"},
- {dis:"B형간염",vac:"유박스비프리필드주",mf:"(주)엘지화학",lp:"UFP"},
- {dis:"폐렴구균",vac:"프리베나13주",mf:"한국화이자제약(주)",lp:"PF"},
- {dis:"대상포진",vac:"스카이조스터주",mf:"에스케이바이오사이언스(주)",lp:"SZ"},
- {dis:"사람유두종바이러스",vac:"가다실9프리필드시린지",mf:"한국엠에스디(주)",lp:"GD"},
-];
-
-/* ── 관할 위탁의료기관 25개소 (샘플) ── */
-// [id,이름,행정동,유형,담당자,연락처,금일,누적,재고부족수,임박lot,만료lot,이상반응,중증,수신상태,동기화, dx,dy]
-const RAW=[
- ["md","메디체크병원","논현2동","병원","김영희","032-455-7000",42,18920,2,1,0,32,2,"지연","13:10",0,0],
- ["ys","연세플러스의원","논현1동","의원","이원장","032-466-1100",30,5340,0,1,1,2,0,"정상","16:31",0,0],
- ["br","밝은미래소아청소년과의원","구월3동","의원","박원장","032-471-2200",30,6110,1,0,0,1,0,"정상","16:28",-18,8],
- ["kd","키즈웰소아청소년과의원","만수4동","의원","최원장","032-442-3300",30,4820,0,0,0,0,0,"정상","16:30",0,0],
- ["ic","21세기미소내과의원","간석2동","의원","한원장","032-433-4400",18,3210,0,0,0,1,0,"정상","16:25",0,0],
- ["sg","Dr.송내과의원","서창2동","의원","송원장","032-727-5500",0,4130,0,0,0,0,0,"미수신","10-19 09:40",-20,-6],
- ["fs","153신경외과의원","구월1동","의원","오원장","032-468-1530",24,7210,1,0,0,3,0,"정상","16:20",-12,-10],
- ["gs","구월서울내과의원","구월1동","의원","정원장","032-422-8811",38,9860,0,0,0,2,0,"정상","16:33",14,14],
- ["mf","만수가정의학과의원","만수1동","의원","윤원장","032-463-2275",16,2980,0,0,0,0,0,"정상","16:12",0,0],
- ["gt","간석튼튼소아청소년과의원","간석4동","의원","장원장","032-425-7575",27,5410,0,0,0,1,0,"정상","16:29",0,0],
- ["ng","논현고잔연합의원","논현고잔동","의원","서원장","032-438-0909",21,4470,0,2,0,2,0,"정상","16:18",-16,-8],
- ["nc","남촌정형외과의원","남촌도림동","의원","강원장","032-469-3300",9,1780,0,0,0,0,0,"정상","16:02",-10,-8],
- ["js","장수서창365의원","장수서창동","의원","조원장","032-473-3650",19,3660,0,0,0,1,0,"정상","16:27",0,0],
- ["mh","만수힐링내과의원","만수6동","의원","임원장","032-461-1919",28,6230,0,0,0,21,1,"정상","16:26",0,0],
- ["ga","구월아이사랑소아청소년과","구월2동","의원","신원장","032-434-2424",33,7120,0,0,0,2,0,"정상","16:31",0,0],
- ["gc","간석참편한내과의원","간석1동","의원","권원장","032-427-8282",22,4880,0,0,0,1,0,"정상","16:21",0,0],
- ["sy","서창연세가정의원","서창2동","의원","황원장","032-472-1010",6,1920,0,0,0,0,0,"지연","14:05",18,10],
- ["nb","논현바른내과의원","논현1동","의원","안원장","032-435-5151",17,3390,0,0,0,1,0,"정상","16:15",4,24],
- ["md2","만수드림이비인후과의원","만수3동","의원","송원장","032-464-7171",14,2610,0,0,0,0,0,"정상","16:09",0,0],
- ["gj","간석제일의원","간석3동","의원","유원장","032-426-1004",12,2240,1,0,0,0,0,"정상","16:11",0,0],
- ["hd","인천현대병원","구월4동","병원","남과장","032-440-9000",48,21350,0,0,0,4,0,"정상","16:34",0,0],
- ["mb","만수봄소아청소년과의원","만수5동","의원","홍원장","032-465-2121",26,5180,0,0,0,1,0,"정상","16:24",0,0],
- ["ms","만수새봄내과의원","만수2동","의원","전원장","032-466-3939",15,2870,0,0,0,0,0,"정상","16:14",0,0],
- ["nh","논현행복한의원","논현2동","의원","고원장","032-437-8282",11,2050,0,0,0,1,0,"정상","16:10",16,22],
- ["dw","도림우리가정의학과의원","남촌도림동","의원","문원장","032-468-6262",8,1690,0,0,0,0,0,"정상","15:58",16,14],
-];
-const SURN=["김","이","박","최","정","강","조","윤","장","임"],GIV=["*동","*수","*영","*희","*진","*호","*민","*연"];
-const ORGS=RAW.map((r,i)=>{
-  const o={id:r[0],n:r[1],dg:r[2],t:r[3],m:r[4],p:r[5],td:r[6],tot:r[7],shN:r[8],exN:r[9],xN:r[10],ad:r[11],sv:r[12],ds:r[13],sy:r[14]};
-  const c=DC[o.dg];o.x=c[0]+r[15];o.y=c[1]+r[16]+8;
-  o.addr=`인천광역시 남동구 ${o.dg.replace(/(\d)동$/,"$1동")} ${(i*37)%400+12}`;
-  o.doc=`${2+i%5} / ${4+i%7}명`;o.beds=o.t==="병원"?`${100+i*3}개`:"-";
-  o.selfchk=70+(i*7)%27;
-  o.stock=VACS.slice(0,4+(i%2)).map((v,k)=>{
-    let lots=[];
-    const base=55+((i*37+k*53)%95);
-    if(k===0&&o.shN>0){lots.push({lot:`${v.lp}24${20+i}`,exp:"2027-02-11",r:18+i%20});}
-    else lots.push({lot:`${v.lp}25${10+k}${i%9}`,exp:`2027-0${(k+i)%9+1}-1${k}`,r:base});
-    if(k===1&&o.shN>1) lots=[{lot:`${v.lp}2508${i}`,exp:"2027-05-30",r:31}];
-    if(k===0&&o.exN>0) lots.unshift({lot:`${v.lp}2410${i}`,exp:`2026-11-0${3+i%5}`,r:20+i%9});
-    if(k===2&&o.exN>1) lots.unshift({lot:`${v.lp}2411${i}`,exp:"2026-11-14",r:12});
-    if(k===1&&o.xN>0) lots.unshift({lot:`${v.lp}23509`,exp:"2026-10-12",r:20});
-    const q=lots.filter(l=>dd(l.exp)>=0).reduce((a,l)=>a+l.r,0);
-    return {...v,lots,q,safe:50,prop:100};
-  });
-  o.st=o.stock.reduce((a,s)=>a+s.q,0);
-  o.expiring=o.stock.reduce((a,s)=>a+s.lots.filter(l=>dd(l.exp)<=30).length,0);
-  o.short=o.stock.filter(s=>s.q<s.safe).length;
-  return o;
-});
-function stOf(o){if(o.ds==="미수신")return"inactive";if(o.sv>0||o.ad>=20)return"danger";if(o.short>0||o.expiring>0||o.ds==="지연")return"warning";if(o.td>=35)return"high";return"normal"}
-const SL={normal:["정상","●"],high:["접종다수","▲"],warning:["주의","◆"],danger:["위험","■"],inactive:["미수신","○"]};
-const SCOL={normal:"--ok-dot",high:"--hi-dot",warning:"--warn-dot",danger:"--dan-dot",inactive:"--off-dot"};
-const badge=s=>`<span class="badge s-${s}">${SL[s][1]} ${SL[s][0]}</span>`;
-const byId=id=>ORGS.find(o=>o.id===id);
-
-/* ── 이상반응 / 접종 상세 샘플 ── */
-const SYM=["접종부위 통증","발열","근육통","두통","오한","부종","발진","호흡곤란/흉통"];
-const ADV=[];
-ORGS.forEach((o,i)=>{const n=Math.min(o.ad,o.ad>=20?6:2);for(let k=0;k<n;k++){const s=o.stock[(k+i)%o.stock.length];const sev=k<o.sv;ADV.push({o,dt:`2026-10-${String(15+(k*3+i)%7).padStart(2,"0")}`,dis:s.dis,vac:s.vac,lot:s.lots[s.lots.length-1].lot,sex:(i+k)%2?"여":"남",age:20+(i*11+k*7)%60,kind:k%3===1?"기저질환":"일반",sym:sev?"호흡곤란/흉통":SYM[(i+k)%7],pain:sev?5:1+(i+k*2)%4})}});
-ADV.sort((a,b)=>b.pain-a.pain||b.dt.localeCompare(a.dt));
-const DET=[];
-ORGS.filter(o=>o.td>0).forEach((o,i)=>{for(let k=0;k<2;k++){const s=o.stock[(i+k)%o.stock.length];const l=s.lots[s.lots.length-1];DET.push({o,dt:`2026-10-21 ${String(9+(i+k*4)%8).padStart(2,"0")}:${String((i*13+k*29)%60).padStart(2,"0")}`,dis:s.dis,vac:s.vac,lot:l.lot,exp:l.exp,nm:SURN[(i+k)%10]+GIV[(i*3+k)%8],sex:(i+k)%2?"여성":"남성"})}});
-DET.sort((a,b)=>b.dt.localeCompare(a.dt));
-
-/* ── 알림 ── */
-const ALERTS=[
- {lv:"u",t:"고위험 로트번호 감지",org:"md",d:"보령플루V테트라백신주 FL24103 · 이상반응 접수율 전주 대비 1.33%p 증가",tm:"방금"},
- {lv:"u",t:"이상반응 급증",org:"md",d:"폐렴구균 접종 후 이상반응 32건 (중증 의심 2건)",tm:"1시간 전"},
- {lv:"u",t:"이상반응 급증",org:"mh",d:"최근 7일 이상반응 21건 (중증 의심 1건)",tm:"2시간 전"},
- {lv:"u",t:"만료 재고 미폐기",org:"ys",d:"유박스비프리필드주 UFP23509 · 2026-10-12 만료 20도스",tm:"3시간 전"},
- {lv:"w",t:"재고 부족",org:"md",d:"인플루엔자 백신 안전재고(50) 미달",tm:"30분 전"},
- {lv:"w",t:"유효기한 임박",org:"ng",d:"30일 이내 만료 로트 2건",tm:"2시간 전"},
- {lv:"c",t:"데이터 미수신",org:"sg",d:"48시간 이상 접종·재고 데이터 미수신",tm:"오늘 09:00"},
-];
-const LVN={u:"긴급",w:"주의",c:"확인필요"};
-
-/* ── KPI ── */
-function renderKPI(){
-  const tot=ORGS.reduce((a,o)=>a+o.tot,0),td=ORGS.reduce((a,o)=>a+o.td,0),st=ORGS.reduce((a,o)=>a+o.st,0),ad=ORGS.reduce((a,o)=>a+o.ad,0),sv=ORGS.reduce((a,o)=>a+o.sv,0);
-  const flu=ORGS.reduce((a,o)=>a+(o.stock[0].q),0);
-  const cnt=k=>ORGS.filter(o=>stOf(o)===k).length;
-  $("#kpis").innerHTML=[
-    ["권역 내 기관 수",ORGS.length,`<span>보건소 1 · 위탁의료기관 ${ORGS.length}</span><span><b class="up">■ 위험 ${cnt("danger")}</b> · <b style="color:var(--warn)">◆ 주의 ${cnt("warning")}</b> · ○ 미수신 ${cnt("inactive")}</span>`],
-    ["총 접종자 수",fmt(tot),`<span>금일 ${fmt(td)}명</span><span class="up">전일 대비 ▲ 4.2%</span>`],
-    ["총 잔여 재고",fmt(st),`<span>인플루엔자 ${fmt(flu)}도스</span><span>부족 기관 ${ORGS.filter(o=>o.short).length}곳</span>`],
-    ["이상반응",ad,`<span>중증 의심 ${sv}건</span><span class="up">전주 대비 ▲ 38%</span>`],
-  ].map(k=>`<div class="card kpi"><span class="l">${k[0]}</span><span class="v num">${k[1]}</span><span class="s num">${k[2]}</span></div>`).join("");
-}
-
-/* ── 지도 ── */
-let mapF="all",pinned=null,hideT=null;
-const MF=[["all","전체 기관"],["danger","위험"],["warning","주의"],["high","접종다수"],["inactive","미수신"]];
-function renderMap(){
-  const svg=$("#map");
-  let h=DONGS.map(d=>`<polygon class="dong" data-dong="${d[0]}" points="${d[2].map(p=>p.join(",")).join(" ")}" fill="var(--m${d[1]})"/>`).join("");
-  h+=DONGS.map(d=>{const c=DC[d[0]];return`<text class="dlabel" x="${c[0]}" y="${c[1]-6}" text-anchor="middle">${d[0]}</text>`}).join("");
-  h+=ORGS.map(o=>{const s=stOf(o),col=`var(${SCOL[s]})`,r=s==="danger"?9:7;return`<g class="mk" data-id="${o.id}" tabindex="0" role="button" aria-label="${o.n} ${SL[s][0]}">${s==="danger"?`<circle class="ring" cx="${o.x}" cy="${o.y}" r="15" stroke="${col}" opacity=".45"><animate attributeName="r" values="11;17;11" dur="2.2s" repeatCount="indefinite"/></circle>`:""}<circle cx="${o.x}" cy="${o.y}" r="${r}" fill="${col}" stroke="var(--surface)" stroke-width="2.5"/></g>`}).join("");
-  svg.innerHTML=h;
-  $("#mapf").innerHTML=MF.map(f=>`<button class="chip ${mapF===f[0]?"on":""}" data-f="${f[0]}">${f[0]!=="all"?`<i style="background:var(${SCOL[f[0]]})"></i>`:""}${f[1]} <span class="num">${f[0]==="all"?ORGS.length:ORGS.filter(o=>stOf(o)===f[0]).length}</span></button>`).join("")+`<span class="hint2">마커에 마우스를 올리면 요약, 클릭하면 고정</span>`;
-  $("#legend").innerHTML=`<b style="color:var(--fg);font-weight:500">기관 상태</b>`+Object.keys(SL).map(k=>`<span><i style="background:var(${SCOL[k]})"></i>${SL[k][1]} ${SL[k][0]}</span>`).join("");
-  applyMapF();
-  svg.querySelectorAll(".mk").forEach(g=>{
-    g.addEventListener("mouseenter",()=>{clearTimeout(hideT);if(!pinned)showPop(g.dataset.id)});
-    g.addEventListener("mouseleave",()=>{if(!pinned)hideT=setTimeout(hidePop,220)});
-    g.addEventListener("click",()=>{pinned=g.dataset.id;showPop(pinned)});
-    g.addEventListener("keydown",e=>{if(e.key==="Enter"){pinned=g.dataset.id;showPop(pinned)}});
-  });
-}
-function applyMapF(){document.querySelectorAll("#map .mk").forEach(g=>g.classList.toggle("dim",mapF!=="all"&&stOf(byId(g.dataset.id))!==mapF))}
-$("#mapf").addEventListener("click",e=>{const b=e.target.closest("[data-f]");if(!b)return;mapF=b.dataset.f;renderMap()});
-const pop=$("#pop");
-pop.addEventListener("mouseenter",()=>clearTimeout(hideT));
-pop.addEventListener("mouseleave",()=>{if(!pinned)hideT=setTimeout(hidePop,220)});
-function showPop(id){
-  const o=byId(id),s=stOf(o),stage=$("#stage"),svg=$("#map");
-  const sr=stage.getBoundingClientRect(),vr=svg.getBoundingClientRect();
-  const sc=Math.min(vr.width/640,vr.height/590),ox=vr.left-sr.left+(vr.width-640*sc)/2,oy=vr.top-sr.top+(vr.height-590*sc)/2;
-  const px=ox+o.x*sc,py=oy+o.y*sc;
-  const rate=o.tot?(o.ad/o.tot*100).toFixed(2):"0.00";
-  pop.innerHTML=`<h4>${o.n} ${badge(s)}</h4><div class="sub">인천 남동구 ${o.dg} · ${o.t} · 담당자 ${o.m}</div>
-  <div class="pgrid num"><div>금일 접종<b>${o.td}명</b></div><div>누적 접종<b>${fmt(o.tot)}명</b></div>
-  <div>재고<b>${fmt(o.st)}개</b></div><div>백신 부족<b class="${o.short?"r":""}">${o.short}종</b></div>
-  <div>이상반응 접수<b class="${o.ad>=20?"r":""}">${o.ad}건</b></div><div>유효기한 임박<b class="${o.expiring?"r":""}">${o.expiring}건</b></div>
-  <div>이상반응율<b>${rate}%</b></div><div>최종 수신<b class="${o.ds!=="정상"?"r":""}">${o.sy}</b></div></div>
-  <div style="display:flex;gap:6px"><button class="btn sm" style="flex:1" data-open="${o.id}">상세보기</button>${pinned?`<button class="btn other-ol sm" data-close="1">닫기</button>`:""}</div>`;
-  pop.hidden=false;
-  const w=pop.offsetWidth,h=pop.offsetHeight;
-  let L=px+14,T=py-h/2;
-  if(L+w>sr.width-8)L=px-w-14;
-  L=Math.max(8,L);T=Math.max(8,Math.min(T,sr.height-h-8));
-  pop.style.left=L+"px";pop.style.top=T+"px";
-}
-function hidePop(){pop.hidden=true;pinned=null}
-pop.addEventListener("click",e=>{if(e.target.closest("[data-close]"))hidePop();const b=e.target.closest("[data-open]");if(b){openModal(b.dataset.open);hidePop()}});
-
-/* ── 알림 ── */
-function renderAlerts(){
-  $("#acnt").textContent=`긴급 ${ALERTS.filter(a=>a.lv==="u").length}`;
-  $("#alist").innerHTML=ALERTS.map(a=>`<button class="al" data-open="${a.org}"><div class="t"><span class="lv ${a.lv}">${LVN[a.lv]}</span>${a.t}<time>${a.tm}</time></div><p><b style="color:var(--fg);font-weight:500">${byId(a.org).n}</b> · ${a.d}</p></button>`).join("");
-}
-$("#alist").addEventListener("click",e=>{const b=e.target.closest("[data-open]");if(b)openModal(b.dataset.open)});
-
-/* ── 필터 ── */
-const F={dong:"",org:"",dis:"",vac:""};
-function opts(sel,list,ph){sel.innerHTML=`<option value="">${ph}</option>`+list.map(v=>`<option value="${v[0]}">${v[1]}</option>`).join("")}
-function setupFilters(){
-  opts($("#fDong"),DONGS.map(d=>[d[0],d[0]]),"전체");
-  refreshOrgOpts();
-  opts($("#fDis"),VACS.map(v=>[v.dis,v.dis]),"전체");
-  opts($("#fVac"),VACS.map(v=>[v.vac,v.vac]),"전체");
-  [["#fDong","dong"],["#fOrg","org"],["#fDis","dis"],["#fVac","vac"]].forEach(([s,k])=>$(s).addEventListener("change",e=>{F[k]=e.target.value;Object.keys(PG).forEach(x=>PG[x]=1);if(k==="dong"){F.org="";refreshOrgOpts()}renderTables()}));
-}
-function refreshOrgOpts(){opts($("#fOrg"),ORGS.filter(o=>!F.dong||o.dg===F.dong).map(o=>[o.id,o.n]),"전체");$("#fOrg").value=F.org}
-const okO=o=>(!F.dong||o.dg===F.dong)&&(!F.org||o.id===F.org);
-const okV=r=>(!F.dis||r.dis===F.dis)&&(!F.vac||r.vac===F.vac);
-function renderChips(){
-  [["#fDong","dong"],["#fOrg","org"],["#fDis","dis"],["#fVac","vac"]].forEach(([q,k])=>$(q).classList.toggle("sel",!!F[k]));
-  const t=[];if(F.dong)t.push(["dong","인천 남동구 "+F.dong]);if(F.org)t.push(["org",byId(F.org).n]);if(F.dis)t.push(["dis",F.dis]);if(F.vac)t.push(["vac",F.vac]);
-  $("#selrow").innerHTML=`<b>선택항목</b>`+(t.length?t.map(x=>`<span class="tag">${x[1]}<button data-k="${x[0]}" aria-label="${x[1]} 해제">×</button></span>`).join("")+`<button class="lnk" data-k="all">전체 해제</button>`:`<span style="font-size:12px;color:var(--faint)">조건 없음 · 남동구 전체 25개 기관</span>`);
-}
-$("#selrow").addEventListener("click",e=>{const b=e.target.closest("[data-k]");if(!b)return;const k=b.dataset.k;if(k==="all"){F.dong=F.org=F.dis=F.vac=""}else F[k]="";if(k==="dong"||k==="all")refreshOrgOpts();["dong","org","dis","vac"].forEach(x=>$("#f"+x[0].toUpperCase()+x.slice(1)).value=F[x]);renderTables()});
-
-/* ── 테이블 ── */
-const PCOL=["--p1","--p2","--p3","--p4","--p5"];
-let openStock=new Set(["ys|B형간염"]),advTab="전체";
-const PG={orgs:1,detail:1,stock:1,exp:1,adv:1},PP={orgs:10,detail:10,stock:10,exp:10,adv:10};
-function page(key,arr){const n=Math.max(1,Math.ceil(arr.length/PP[key]));if(PG[key]>n)PG[key]=n;const cur=PG[key];
-  const el=$("#pg-"+key);
-  if(el){let nums=[];if(n<=7){for(let i=1;i<=n;i++)nums.push(i)}else{nums=[1];if(cur>4)nums.push("…");for(let i=Math.max(2,cur-1);i<=Math.min(n-1,cur+1);i++)nums.push(i);if(cur<n-3)nums.push("…");nums.push(n)}
-    el.innerHTML=arr.length?`<button data-pg="${key}" data-p="${cur-1}" ${cur===1?"disabled":""} aria-label="이전 페이지">‹</button>`+nums.map(x=>x==="…"?`<span class="dots">…</span>`:`<button data-pg="${key}" data-p="${x}" class="num ${x===cur?"on":""}" ${x===cur?'aria-current="page"':""}>${x}</button>`).join("")+`<button data-pg="${key}" data-p="${cur+1}" ${cur===n?"disabled":""} aria-label="다음 페이지">›</button><select data-pp="${key}" aria-label="페이지당 행 수">${[10,20,50].map(v=>`<option value="${v}" ${PP[key]===v?"selected":""}>${v} / page</option>`).join("")}</select>`:""}
-  return arr.slice((cur-1)*PP[key],cur*PP[key]);}
-document.addEventListener("click",e=>{const b=e.target.closest("[data-pg]");if(!b||b.disabled)return;PG[b.dataset.pg]=+b.dataset.p;b.dataset.pg==="orgs"?renderOrgs():renderTables()});
-document.addEventListener("change",e=>{const s=e.target.closest("[data-pp]");if(!s)return;PP[s.dataset.pp]=+s.value;PG[s.dataset.pp]=1;s.dataset.pp==="orgs"?renderOrgs():renderTables()});
-function renderTables(){
-  renderChips();renderSubKPI();renderOrgs();
-  const orgs=ORGS.filter(okO);
-  $("#tVacc").innerHTML=orgs.length?orgs.slice().sort((a,b)=>b.td-a.td).map(o=>`<tr class="click" data-open="${o.id}"><td class="l">${o.n}</td><td>${o.dg}</td><td class="num">${o.td}</td><td class="num">${fmt(o.tot)}</td><td>${badge(stOf(o))}</td></tr>`).join(""):`<tr><td colspan="5" class="empty">조건에 맞는 기관이 없습니다</td></tr>`;
-  const det=DET.filter(r=>okO(r.o)&&okV(r));
-  $("#dcnt").textContent=`${det.length}건`;
-  $("#tDetail").innerHTML=det.length?page("detail",det).map(r=>`<tr class="click" data-open="${r.o.id}"><td class="num">${r.dt}</td><td>${r.o.n}</td><td>${r.dis}</td><td class="trunc">${r.vac}</td><td class="num">${r.lot}</td><td class="num">${r.exp}</td><td>${r.nm}</td><td>${r.sex}</td></tr>`).join(""):(page("detail",[]),`<tr><td colspan="8" class="empty">접종 기록이 없습니다</td></tr>`);
-  const rows=[];orgs.forEach(o=>o.stock.filter(okV).forEach(s=>rows.push({o,s})));
-  rows.sort((a,b)=>(a.s.q/a.s.safe)-(b.s.q/b.s.safe));
-  $("#tStock").innerHTML=rows.length?page("stock",rows).map(({o,s})=>{const k=o.id+"|"+s.dis,op=openStock.has(k);const stt=s.lots.some(l=>dd(l.exp)<0)?"danger":s.q<s.safe?"warning":"normal";const lbl={danger:"만료 미폐기",warning:"재고 부족",normal:"충분"}[stt];
-    return `<tr class="click" data-stk="${k}"><td class="l">${o.n}</td><td>${s.dis}</td><td class="trunc">${s.vac}</td><td class="num ${s.q<s.safe?"red":""}">${s.q}</td><td class="num">${s.safe} / ${s.prop}</td><td><span class="badge s-${stt}">${lbl}</span></td><td><button class="lnk" aria-expanded="${op}">${op?"접기 ▴":"상세보기 ▾"}</button></td></tr>`+(op?s.lots.map(l=>{const d=dd(l.exp);return`<tr class="sub-row"><td><span class="k">제조사</span>${s.mf}</td><td><span class="k">로트번호</span>${l.lot}</td><td colspan="2"><span class="k">유효기한</span><span class="${d<=30?"red":""}">${l.exp}</span> ${d<0?'<span class="badge s-danger">만료</span>':d<=30?`<span class="badge s-warning">D-${d}</span>`:""}</td><td colspan="3"><span class="k">잔여수량</span><b class="${d<0?"red":""}">${l.r}</b></td></tr>`}).join(""):"")}).join(""):(page("stock",[]),`<tr><td colspan="7" class="empty">재고 데이터가 없습니다</td></tr>`);
-  const ex=[];orgs.forEach(o=>o.stock.filter(okV).forEach(s=>s.lots.forEach(l=>{const d=dd(l.exp);if(d<=30)ex.push({o,s,l,d})})));
-  ex.sort((a,b)=>a.d-b.d);
-  $("#tExp").innerHTML=ex.length?page("exp",ex).map(({o,s,l,d})=>`<tr class="click" data-open="${o.id}"><td class="l">${o.n}</td><td>${s.dis}</td><td class="trunc">${s.vac}</td><td>${s.mf}</td><td class="num">${l.lot}</td><td class="num red">${l.exp}</td><td class="num">${l.r}</td><td><span class="badge ${d<0?"s-danger":d<=14?"s-danger":"s-warning"}">${d<0?"만료 "+(-d)+"일 경과":"D-"+d}</span></td></tr>`).join(""):(page("exp",[]),`<tr><td colspan="8" class="empty">30일 이내 만료 예정 백신이 없습니다</td></tr>`);
-  $("#advTabs").innerHTML=["전체","일반","기저질환"].map(t=>`<button class="tab ${advTab===t?"on":""}" role="tab" aria-selected="${advTab===t}" data-t="${t}">${t}</button>`).join("");
-  const adv=ADV.filter(r=>okO(r.o)&&okV(r)&&(advTab==="전체"||r.kind===advTab));
-  $("#tAdv").innerHTML=adv.length?page("adv",adv).map(r=>`<tr class="click" data-open="${r.o.id}"><td class="num">${r.dt}</td><td>${r.o.n}</td><td>${r.dis}</td><td class="trunc">${r.vac}</td><td class="num">${r.lot}</td><td>${r.sex} / ${r.age}세</td><td>${r.kind}</td><td style="${r.pain>=5?"color:var(--dan);font-weight:700":""}">${r.sym}</td><td><span class="pain num" style="background:var(${PCOL[r.pain-1]})">${r.pain}</span></td></tr>`).join(""):(page("adv",[]),`<tr><td colspan="9" class="empty">이상반응 접수 내역이 없습니다</td></tr>`);
-  if(window.hourChart)updHour(orgs);
-}
-document.addEventListener("click",e=>{
-  const s=e.target.closest("[data-stk]");if(s){const k=s.dataset.stk;openStock.has(k)?openStock.delete(k):openStock.add(k);renderTables();return}
-  const t=e.target.closest("#advTabs [data-t]");if(t){advTab=t.dataset.t;PG.adv=1;renderTables();return}
-  const r=e.target.closest("tbody [data-open]");if(r)openModal(r.dataset.open);
-});
-
-/* ── 차트 ── */
-let charts=[];
-function base(){Chart.defaults.font.family=css("--font");Chart.defaults.font.size=11;Chart.defaults.color=css("--muted");Chart.defaults.borderColor=css("--line")}
-const HOURS=["9시","10시","11시","12시","13시","14시","15시","16시","17시","18시"];
-function hourData(orgs){const tot=orgs.reduce((a,o)=>a+o.td,0);const w=[.09,.14,.15,.08,.1,.13,.14,.12,.05,0];return w.map(x=>Math.round(tot*x))}
-function updHour(orgs){window.hourChart.data.datasets[0].data=hourData(orgs).slice(0,8);window.hourChart.update()}
-function renderCharts(){
-  if(!window.Chart)return;
-  charts.forEach(c=>c.destroy());charts=[];base();
-  const C=[css("--c1"),css("--c2"),css("--c3"),css("--c4"),css("--c5")],grid={color:css("--line")};
-  const noLeg={legend:{display:false}};
-  charts.push(new Chart($("#cTrend"),{type:"line",data:{labels:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월"],datasets:[{label:"2026년",data:[820,760,690,720,810,860,780,740,1180,1284],borderColor:C[0],backgroundColor:C[0],tension:.35,pointRadius:0,borderWidth:2},{label:"2025년",data:[790,710,700,680,760,820,800,700,1050,1143],borderColor:C[1],backgroundColor:C[1],borderDash:[5,4],tension:.35,pointRadius:0,borderWidth:2}]},options:{maintainAspectRatio:false,plugins:{legend:{position:"top",align:"end",labels:{boxWidth:8,boxHeight:8,usePointStyle:true}}},scales:{x:{grid:{display:false}},y:{grid,beginAtZero:true}}}}));
-  charts.push(new Chart($("#cAge"),{type:"bar",data:{labels:["70세+","60대","50대","40대","30대","20대","10대","0~9세"],datasets:[{data:[2810,2340,1650,1120,980,760,1490,2210],backgroundColor:[C[2],C[0],C[4],C[0],C[3],C[2],C[1],C[0]],borderRadius:3,barThickness:9}]},options:{indexAxis:"y",maintainAspectRatio:false,plugins:noLeg,scales:{x:{grid},y:{grid:{display:false}}}}}));
-  charts.push(new Chart($("#cSex"),{type:"pie",data:{labels:["남성","여성"],datasets:[{data:[6420,8940],backgroundColor:[C[0],C[1]],borderColor:css("--surface"),borderWidth:2}]},options:{maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:8,boxHeight:8,usePointStyle:true}}}}}));
-  const ad={};ADV.forEach(r=>ad[r.dis]=(ad[r.dis]||0)+1);const adL=Object.keys(ad).sort((a,b)=>ad[b]-ad[a]);
-  const adScale=ORGS.reduce((a,o)=>a+o.ad,0)/ADV.length;
-  charts.push(new Chart($("#cDis"),{type:"bar",data:{labels:adL.map(x=>x==="사람유두종바이러스"?"HPV":x),datasets:[{data:adL.map(k=>Math.round(ad[k]*adScale)),backgroundColor:[C[4],C[0],C[3],C[2],C[1]],borderRadius:3,barThickness:10}]},options:{indexAxis:"y",maintainAspectRatio:false,plugins:noLeg,scales:{x:{grid},y:{grid:{display:false}}}}}));
-  charts.push(new Chart($("#cPain"),{type:"doughnut",data:{labels:["1점","2점","3점","4점","5점"],datasets:[{data:[22,27,19,12,4],backgroundColor:[css("--p1"),css("--p2"),css("--p3"),css("--p4"),css("--p5")],borderColor:css("--surface"),borderWidth:2}]},options:{maintainAspectRatio:false,cutout:"58%",plugins:{legend:{position:"bottom",labels:{boxWidth:7,boxHeight:7,usePointStyle:true,font:{size:10}}}}}}));
-  window.hourChart=new Chart($("#cHour"),{type:"line",data:{labels:HOURS,datasets:[{label:"당일 접종량",data:hourData(ORGS.filter(okO)).slice(0,8),borderColor:css("--brand"),backgroundColor:css("--brand-soft"),fill:true,tension:.3,pointBackgroundColor:css("--surface"),pointBorderColor:css("--brand"),pointRadius:4,borderWidth:2}]},options:{maintainAspectRatio:false,plugins:{legend:{position:"top",align:"end",labels:{boxWidth:8,usePointStyle:true}}},scales:{x:{grid:{display:false}},y:{grid,beginAtZero:true}}}});
-  charts.push(window.hourChart);
-  const top=ORGS.filter(okO).filter(o=>o.ad>0).sort((a,b)=>b.ad-a.ad).slice(0,10);
-  charts.push(new Chart($("#cAdvOrg"),{type:"bar",data:{labels:top.map(o=>o.n),datasets:[{label:"일반",data:top.map(o=>o.ad-o.sv),backgroundColor:top.map(o=>o.ad>=20?css("--warn-dot"):css("--c1")),borderRadius:3,barThickness:12},{label:"중증 의심",data:top.map(o=>o.sv),backgroundColor:css("--dan-dot"),borderRadius:3,barThickness:12}]},options:{indexAxis:"y",maintainAspectRatio:false,plugins:{legend:{position:"top",align:"end",labels:{boxWidth:8,usePointStyle:true}}},scales:{x:{stacked:true,grid},y:{stacked:true,grid:{display:false}}}}}));
-}
-
-/* ── 기관 상세 모달 ── */
-let mOrg=null,mTab="info";
-function openModal(id){mOrg=byId(id);mTab="info";$("#ov").hidden=false;renderModal();setTimeout(()=>$("#modal .x")&&$("#modal .x").focus(),0)}
-function closeModal(){$("#ov").hidden=true;mOrg=null}
-$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")closeModal()});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(!$("#ov").hidden)closeModal();else hidePop()}});
-function renderModal(){
-  const o=mOrg,s=stOf(o);
-  const tabs=[["info","기관 정보"],["vacc","접종 현황"],["adv","이상 반응"],["stock","재고 현황"]];
-  const expL=o.stock.flatMap(x=>x.lots.filter(l=>dd(l.exp)<=30).map(l=>({...l,vac:x.vac,dis:x.dis})));
-  let body="";
-  if(mTab==="info"){
-    body=`<div class="info num">
-      <div><span>기관유형</span><b>${o.t==="병원"?"종합병원":"의원"} · 위탁의료기관</b></div><div><span>취급 백신</span><b>${o.stock.length}종</b></div>
-      <div><span>주소</span><b>${o.addr}</b></div><div><span>유효기한 임박</span><b style="${expL.length?"color:var(--warn)":""}">${expL.length}건</b></div>
-      <div><span>연락처</span><b>${o.p}</b></div><div><span>자가체크 응답률</span><b>${o.selfchk}%</b></div>
-      <div><span>의사 / 간호사</span><b>${o.doc}</b></div><div><span>안전재고 미달</span><b style="${o.short?"color:var(--dan)":""}">${o.short}종</b></div>
-      <div><span>병상</span><b>${o.beds}</b></div><div><span>데이터 수신</span><b style="color:var(${o.ds==="정상"?"--ok":o.ds==="지연"?"--warn":"--dan"})">${o.ds} · ${o.sy}</b></div>
-      <div><span>관할 보건소</span><b>남동구보건소</b></div><div><span>담당자</span><b>${o.m}</b></div></div>`+
-      expL.map(l=>`<div class="note"><i style="background:var(--warn-bg);color:var(--warn)">!</i>${l.vac} 로트번호 ${l.lot}의 유효기한이 ${dd(l.exp)<0?`${-dd(l.exp)}일 지났습니다. 폐기 처리가 필요합니다.`:`${dd(l.exp)}일 남았습니다.`}</div>`).join("")+
-      (o.ad>=20?`<div class="note"><i style="background:var(--dan-bg);color:var(--dan)">!</i>최근 7일 이상반응 접수가 ${o.ad}건으로 관할 평균의 ${Math.round(o.ad/2.6)}배입니다. 중증 의심 ${o.sv}건은 관계기관 보고가 필요합니다.</div>`:"")+
-      (o.ds!=="정상"?`<div class="note"><i style="background:var(--off-bg);color:var(--off)">!</i>마지막 데이터 수신 ${o.sy}. 기관에 연동 상태 확인을 요청하세요.</div>`:"");
-  } else if(mTab==="vacc"){
-    body=`<h4 class="ctitle" style="font-size:13px">기간별 접종량 <small>2026-10-15 ~ 2026-10-21</small></h4><div class="chartbox" style="height:220px"><canvas id="mChart"></canvas></div>
-    <div class="tw" style="margin-top:12px"><table><thead><tr><th>감염병</th><th>백신</th><th>기간 접종</th></tr></thead><tbody>${o.stock.map((x,k)=>`<tr><td>${x.dis}</td><td class="trunc">${x.vac}</td><td class="num">${Math.round(o.td*7*[.42,.2,.18,.12,.08][k])}</td></tr>`).join("")}</tbody></table></div>`;
-  } else if(mTab==="adv"){
-    const rows=ADV.filter(r=>r.o===o);
-    body=`<h4 class="ctitle" style="font-size:13px">감염병별 이상반응 접수 <small>총 ${o.ad}건 · 중증 의심 ${o.sv}건</small></h4>`+(rows.length?`<div class="chartbox" style="height:170px"><canvas id="mChart"></canvas></div><div class="tw" style="margin-top:12px"><table><thead><tr><th>접종일</th><th>백신</th><th>증상</th><th>통증</th></tr></thead><tbody>${rows.map(r=>`<tr><td class="num">${r.dt}</td><td class="trunc">${r.vac}</td><td style="${r.pain>=5?"color:var(--dan);font-weight:700":""}">${r.sym}</td><td><span class="pain" style="background:var(${PCOL[r.pain-1]})">${r.pain}</span></td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">조회 기간 내 이상반응 접수가 없습니다</div>`)+
-      (o.sv?`<div class="note"><i style="background:var(--dan-bg);color:var(--dan)">!</i>보령플루V테트라백신주 FL24103의 이상반응 접수가 전주 대비 1.33%p 상승했습니다.</div>`:"");
-  } else {
-    body=`<h4 class="ctitle" style="font-size:13px">감염병별 재고현황 <small>안전 50 · 적정 100</small></h4>`+o.stock.map(x=>{
-      const pct=Math.min(100,x.q/120*100),col=x.q<x.safe?"--dan":x.q<x.prop?"--warn":"--ok";const ex=x.lots.filter(l=>dd(l.exp)<=30);
-      return `<div class="stk"><div class="top"><b>${x.dis} ${ex.length?`<span class="badge s-danger">유효기한 임박 ${ex.length}</span>`:""}</b><span class="q num">${x.q}개</span></div>
-      <div class="meta">${x.vac} · ${x.mf}</div>
-      <div class="bar"><div class="f" style="width:${pct}%;background:var(${col})"></div><span class="ln" style="left:${50/1.2}%"></span><span class="ln" style="left:${100/1.2}%"></span><span class="tk" style="left:${50/1.2}%">안전</span><span class="tk" style="left:${100/1.2}%">적정</span></div>
-      <div class="lots">${x.lots.map(l=>{const d=dd(l.exp);return`<div class="lot num"><div><span class="k">로트번호</span>${l.lot}</div><div><span class="k">유효기한</span><span class="${d<=30?"red":""}" style="${d<=30?"color:var(--dan);font-weight:700":""}">${l.exp}</span></div><div><span class="k">잔여수량</span><b>${l.r}</b></div>${d<0?'<span class="dday s-danger">만료</span>':d<=30?`<span class="dday s-danger">D-${d}</span>`:`<span class="dday s-normal">D-${d}</span>`}</div>`}).join("")}</div></div>`}).join("");
-  }
-  $("#modal").innerHTML=`<div class="mhead"><div><h3 id="mTitle">${o.n} ${badge(s)}</h3><p>인천 남동구 ${o.dg} · 위탁의료기관 · 담당자 ${o.m} · ${o.p}</p></div><button class="ibtn x" aria-label="닫기" data-mx="1"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-   <div class="mbody"><div class="qbar"><input class="field" type="date" value="2026-10-15" aria-label="시작일" id="md1"><span style="color:var(--faint)">~</span><input class="field" type="date" value="2026-10-21" aria-label="종료일" id="md2"><button class="btn" data-mq="1">조회</button></div>
-   <div class="mkpi num"><div><span>금일 접종</span><b>${o.td}</b></div><div><span>총 접종자 수</span><b>${fmt(o.tot)}</b></div><div><span>총 잔여 재고</span><b>${fmt(o.st)}</b></div><div><span>이상반응</span><b style="${o.ad>=20?"color:var(--dan)":""}">${o.ad}</b></div></div>
-   <div class="tabs" role="tablist">${tabs.map(t=>`<button class="tab ${mTab===t[0]?"on":""}" role="tab" aria-selected="${mTab===t[0]}" data-mt="${t[0]}">${t[1]}</button>`).join("")}</div>
-   <div>${body}</div></div>
-   <div class="mfoot"><button class="btn ghost" data-notify="1">담당자 알림톡 발송</button><button class="btn" data-mx="1">확인</button></div>`;
-  if(window.Chart&&mTab==="vacc"){base();new Chart($("#mChart"),{type:"line",data:{labels:["10/15","10/16","10/17","10/18","10/19","10/20","10/21"],datasets:[{label:"2026년",data:[o.td*.9,o.td*1.1,o.td*.8,o.td*.4,o.td*1.2,o.td*1.05,o.td].map(Math.round),borderColor:css("--c1"),tension:.35,pointRadius:0,borderWidth:2},{label:"2025년",data:[o.td*.85,o.td,o.td*.9,o.td*.5,o.td*1.1,o.td*.95,o.td*.9].map(Math.round),borderColor:css("--c2"),borderDash:[5,4],tension:.35,pointRadius:0,borderWidth:2}]},options:{maintainAspectRatio:false,plugins:{legend:{position:"top",align:"end",labels:{boxWidth:8,usePointStyle:true}}},scales:{x:{grid:{display:false}},y:{beginAtZero:true,grid:{color:css("--line")}}}}})}
-  if(window.Chart&&mTab==="adv"&&$("#mChart")){base();const cnt={};ADV.filter(r=>r.o===o).forEach(r=>cnt[r.dis]=(cnt[r.dis]||0)+1);const k=Object.keys(cnt);const sc=o.ad/ADV.filter(r=>r.o===o).length;new Chart($("#mChart"),{type:"bar",data:{labels:k,datasets:[{data:k.map(x=>Math.round(cnt[x]*sc)),backgroundColor:[css("--c5"),css("--c1"),css("--c4"),css("--c3")],borderRadius:3,barThickness:12}]},options:{indexAxis:"y",maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:css("--line")}},y:{grid:{display:false}}}}})}
-}
-$("#modal").addEventListener("click",e=>{
-  if(e.target.closest("[data-mx]")){closeModal();return}
-  const t=e.target.closest("[data-mt]");if(t){mTab=t.dataset.mt;renderModal();return}
-  if(e.target.closest("[data-notify]")){toast("알림톡 발송 완료",`${mOrg.n} ${mOrg.m} 담당자(${mOrg.p})에게 발송했습니다 · 프로토타입`,"ok")}
-  if(e.target.closest("[data-mq]")){toast("조회 완료",`${$("#md1").value} ~ ${$("#md2").value} 기간 데이터를 불러왔습니다`,"ok")}
-});
-function toast(title,body,kind){const t=$("#toast");const col={ok:"--success",warn:"--caution",err:"--error"}[kind||"ok"];
-  t.innerHTML=`<span class="dot" style="background:var(${col})"></span><div><b>${title}</b>${body?`<p>${body}</p>`:""}</div><button class="ibtn" aria-label="닫기" data-tx="1"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>`;
-  t.hidden=false;t.style.animation="none";void t.offsetWidth;t.style.animation="";clearTimeout(t._h);t._h=setTimeout(()=>t.hidden=true,3000)}
-$("#toast").addEventListener("click",e=>{if(e.target.closest("[data-tx]"))$("#toast").hidden=true});
-$("#qbtn").addEventListener("click",()=>toast("조회 완료",`${$("#d1").value} ~ ${$("#d2").value} 기간 데이터를 불러왔습니다`,"ok"));
-
-/* ── 메뉴(화면) 구분 ── */
-const VIEWS={
-  overview:{t:"관할기관 현황",d:"남동구 관할 위탁의료기관 25곳의 운영 상태를 지도와 지표로 한눈에 확인합니다."},
-  orgs:{t:"관할기관 목록",d:"기관별 핵심 지표와 데이터 수신 상태를 비교하고, 기관 상세로 이동합니다."},
-  vacc:{t:"기관별 접종현황",d:"기관·감염병·백신별 접종량과 접종 상세 내역을 조회합니다."},
-  stock:{t:"기관별 재고현황",d:"기관별 백신 잔여 재고를 안전재고·적정재고 기준과 비교합니다."},
-  expiry:{t:"유효기한 임박",d:"30일 이내 만료 예정이거나 만료 후 폐기되지 않은 로트를 관리합니다."},
-  adverse:{t:"기관별 이상반응",d:"기관별 이상반응 접수 현황과 중증 의심 건을 확인합니다."},
-};
-function navCount(v){
-  if(v==="stock")return ORGS.filter(o=>o.short).length;
-  if(v==="expiry")return ORGS.reduce((a,o)=>a+o.expiring,0);
-  if(v==="adverse")return ORGS.reduce((a,o)=>a+o.sv,0);
-  if(v==="overview")return ALERTS.filter(a=>a.lv==="u").length;
-  return 0;
-}
-function renderSubnav(){$("#subnav").innerHTML=Object.keys(VIEWS).map(v=>{const c=navCount(v);return`<button class="${VIEW===v?"on":""}" data-view="${v}" ${VIEW===v?'aria-current="page"':""}>${VIEWS[v].t}${c?`<span class="cnt num">${c}</span>`:""}</button>`}).join("")}
-$("#subnav").addEventListener("click",e=>{const b=e.target.closest("[data-view]");if(b)setView(b.dataset.view)});
-function setView(v){
-  if(!VIEWS[v])v="overview";VIEW=v;hidePop();
-  document.querySelectorAll("main [data-view]").forEach(s=>{if(s.closest("#subnav"))return;s.hidden=s.dataset.view!==v});
-  $("#filterCard").hidden=v==="overview";
-  $("#subkpi").hidden=v==="overview";
-  $("#ptitle").textContent=v==="overview"?"인천 남동구 관할기관 현황":VIEWS[v].t;
-  $("#pcrumb").textContent=`관할 관리 · 남동구보건소${v==="overview"?"":" · "+VIEWS[v].t}`;
-  $("#pdesc").textContent=VIEWS[v].d;
-  renderRail();renderSubnav();renderSubKPI();renderTables();renderOrgs();renderCharts();
-  try{history.replaceState(null,"","#"+v)}catch(e){}
-  window.scrollTo({top:0});
-}
-function renderSubKPI(){
-  const orgs=ORGS.filter(okO),sum=f=>orgs.reduce((a,o)=>a+f(o),0);
-  const lots=orgs.flatMap(o=>o.stock.filter(okV).flatMap(s=>s.lots.map(l=>({...l,d:dd(l.exp)}))));
-  const K={
-    orgs:[["관할 기관",orgs.length+"곳","보건소 1 포함 시 26"],["정상 수신",orgs.filter(o=>o.ds==="정상").length+"곳","1시간 이내 수신"],["1시간 이상 지연",orgs.filter(o=>o.ds==="지연").length+"곳","연동 확인 필요"],["24시간 이상 미수신",orgs.filter(o=>o.ds==="미수신").length+"곳","기관 연락 필요"]],
-    vacc:[["금일 접종",fmt(sum(o=>o.td))+"명","전일 대비 ▲ 4.2%"],["조회기간 접종",fmt(sum(o=>o.td)*7)+"명","2026-10-15 ~ 10-21"],["누적 접종",fmt(sum(o=>o.tot))+"명","2026년 누계"],["접종 최다 기관",(orgs.slice().sort((a,b)=>b.td-a.td)[0]||{n:"-"}).n,"금일 기준"]],
-    stock:[["총 잔여 재고",fmt(sum(o=>o.st))+"도스",""],["안전재고 미달 기관",orgs.filter(o=>o.short).length+"곳","백신 "+sum(o=>o.short)+"종"],["만료 미폐기",lots.filter(l=>l.d<0).reduce((a,l)=>a+l.r,0)+"도스","즉시 폐기 대상"],["발주 권장 수량",fmt(orgs.reduce((a,o)=>a+o.stock.filter(okV).reduce((b,s)=>b+Math.max(0,s.prop-s.q),0),0))+"도스","적정재고 기준"]],
-    expiry:[["만료 미폐기",lots.filter(l=>l.d<0).length+"건",lots.filter(l=>l.d<0).reduce((a,l)=>a+l.r,0)+"도스"],["7일 이내 만료",lots.filter(l=>l.d>=0&&l.d<=7).length+"건",""],["30일 이내 만료",lots.filter(l=>l.d>=0&&l.d<=30).length+"건",""],["폐기 위험 수량",lots.filter(l=>l.d<=30).reduce((a,l)=>a+l.r,0)+"도스","30일 이내 + 만료"]],
-    adverse:[["이상반응 접수",sum(o=>o.ad)+"건","전주 대비 ▲ 38%"],["중증 의심",sum(o=>o.sv)+"건","관계기관 보고 필요"],["이상반응 접수율",(sum(o=>o.ad)/Math.max(1,sum(o=>o.td)*7)*100).toFixed(1)+"%","조회기간 접종 대비"],["급증 기관",orgs.filter(o=>o.ad>=20).length+"곳","7일 20건 이상"]],
-  }[VIEW];
-  if(!K)return;
-  const warnIdx={orgs:[2,3],stock:[1,2],expiry:[0,1],adverse:[1,3]}[VIEW]||[];
-  $("#subkpi").innerHTML=K.map((k,i)=>`<div class="card kpi"><span class="l">${k[0]}</span><span class="v num" style="${warnIdx.includes(i)&&parseInt(k[1])>0?"color:var(--dan)":""};${k[1].length>9?"font-size:18px":""}">${k[1]}</span><span class="s">${k[2]}</span></div>`).join("");
-}
-
-/* ── 관할기관 목록 ── */
-let oSort={k:"st",dir:-1},oStat="all",oQ="";
-const OCOLS=[["n","기관명"],["dg","행정동"],["t","유형"],["td","금일 접종"],["tot","누적 접종"],["stock","현재 재고"],["short","부족 백신"],["expiring","유효기한 임박"],["ad","이상반응"],["rate","접수율"],["selfchk","자가체크"],["ds","데이터 수신"],["st","종합 상태"]];
-const SRANK={danger:4,warning:3,inactive:2,high:1,normal:0};
-function oval(o,k){if(k==="st")return SRANK[stOf(o)];if(k==="stock")return o.st;if(k==="rate")return o.ad/o.tot;return o[k]}
-function renderOrgs(){
-  if(VIEW!=="orgs")return;
-  $("#ostat").innerHTML=[["all","전체"],["danger","위험"],["warning","주의"],["inactive","미수신"],["normal","정상"]].map(s=>`<button class="chip ${oStat===s[0]?"on":""}" data-os="${s[0]}">${s[1]}</button>`).join("");
-  $("#ohead").innerHTML=OCOLS.map(c=>`<th class="sort ${oSort.k===c[0]?"on":""}" data-sk="${c[0]}" aria-sort="${oSort.k===c[0]?(oSort.dir>0?"ascending":"descending"):"none"}">${c[1]}${oSort.k===c[0]?(oSort.dir>0?" ▲":" ▼"):""}</th>`).join("");
-  let list=ORGS.filter(okO).filter(o=>!$("#oIssue").checked||stOf(o)!=="normal").filter(o=>oStat==="all"||stOf(o)===oStat).filter(o=>!oQ||(o.n+o.m).includes(oQ));
-  list.sort((a,b)=>{const x=oval(a,oSort.k),y=oval(b,oSort.k);return (x>y?1:x<y?-1:0)*oSort.dir});
-  $("#ocnt").textContent=`${list.length}곳`;
-  $("#tOrgs").innerHTML=list.length?page("orgs",list).map(o=>{const r=(o.ad/o.tot*100).toFixed(2),ck=o.selfchk;return`<tr class="click" data-open="${o.id}"><td class="l"><b style="font-weight:500">${o.n}</b><br><span style="font-size:11px;color:var(--faint)">${o.m} · ${o.p}</span></td><td>${o.dg}</td><td>${o.t}</td><td class="num">${o.td}</td><td class="num">${fmt(o.tot)}</td><td class="num">${fmt(o.st)}</td><td class="num ${o.short?"red":""}">${o.short}</td><td class="num ${o.expiring?"red":""}">${o.expiring}</td><td class="num ${o.ad>=20?"red":""}">${o.ad}</td><td class="num">${r}%</td><td class="num"><span class="bar-in"><i style="width:${ck}%;background:var(${ck<80?"--warn":"--ok"})"></i></span>${ck}%</td><td style="color:var(${o.ds==="정상"?"--ok":o.ds==="지연"?"--warn":"--dan"})">${o.ds}<br><span style="font-size:11px;color:var(--faint)">${o.sy}</span></td><td>${badge(stOf(o))}</td></tr>`}).join(""):(page("orgs",[]),`<tr><td colspan="13" class="empty">조건에 맞는 기관이 없습니다</td></tr>`);
-}
-$("#ohead").addEventListener("click",e=>{const th=e.target.closest("[data-sk]");if(!th)return;const k=th.dataset.sk;oSort=oSort.k===k?{k,dir:-oSort.dir}:{k,dir:["n","dg","t","ds"].includes(k)?1:-1};renderOrgs()});
-$("#ostat").addEventListener("click",e=>{const b=e.target.closest("[data-os]");if(b){oStat=b.dataset.os;renderOrgs()}});
-$("#oq").addEventListener("input",e=>{oQ=e.target.value.trim();PG.orgs=1;renderOrgs()});
-$("#oIssue").addEventListener("change",()=>{PG.orgs=1;renderOrgs()});
-
-/* ── 초기화 ── */
-renderKPI();renderMap();renderAlerts();setupFilters();
-const h0=(location.hash||"").slice(1);setView(VIEWS[h0]?h0:"overview");
-})();
-</script>
-
-</body></html>
+  </div>
+  <script src="prototype-shell.js"></script>
+  <script>
+    (function () {
+      var links = document.querySelectorAll(".subnav a");
+      var panels = document.querySelectorAll(".sub-panel");
+      links.forEach(function (a) {
+        a.addEventListener("click", function (e) {
+          e.preventDefault();
+          var id = a.getAttribute("data-sub");
+          links.forEach(function (l) { l.classList.toggle("active", l === a); });
+          panels.forEach(function (p) { p.hidden = p.id !== id; });
+        });
+      });
+      new Chart(document.getElementById("chartOrgVax"), {
+        type: "bar",
+        data: { labels: ["월","화","수","목","금","토","일"], datasets: [{ label: "접종 건수", data: [110,120,105,124,118,90,85], backgroundColor: "#1e5eff" }] },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+    })();
+  </script>
+</body>
+</html>

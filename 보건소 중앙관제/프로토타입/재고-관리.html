@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>재고 관리 · VD-IMS</title>
+  <link rel="stylesheet" href="prototype-common.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="rail">
+      <div class="rail-logo">VD</div>
+      <nav class="rail-nav">
+        <a class="rail-link" href="통합-대시보드.html"><span class="rail-icon">📊</span>통합<br />대시보드</a>
+        <a class="rail-link" href="VD-IMS%20관할기관%20현황.html"><span class="rail-icon">🏥</span>관할<br />기관</a>
+        <a class="rail-link active" href="재고-관리.html"><span class="rail-icon">💉</span>재고<br />관리</a>
+        <a class="rail-link" href="이상반응-관리.html"><span class="rail-icon">⚠️</span>이상<br />반응</a>
+        <a class="rail-link" href="알림-조치-관리.html"><span class="rail-icon">🔔</span>알림<br />조치</a>
+      </nav>
+    </aside>
+    <div class="main-wrap">
+      <header class="top-header">
+        <div class="header-title">VD-IMS <span>/ 재고 관리</span></div>
+        <div class="header-search"><input type="search" placeholder="백신·로트·기관 검색" /></div>
+        <div class="header-actions">
+          <div class="user-chip"><span class="avatar">김</span><strong>김보건 · 남동구보건소</strong></div>
+        </div>
+      </header>
+      <main class="page-content">
+        <div class="page-head"><div><h1>재고 관리</h1><p class="sub">불균형 감지 · 임계치 · 재분배 제안·승인 (기획 IA 2Depth)</p></div></div>
+        <div class="filter-bar">
+          <div class="filter-group"><label>지역</label><select><option>남동구</option></select></div>
+          <div class="filter-group"><label>백신</label><select><option>HPV</option><option>전체</option></select></div>
+          <div class="filter-group"><label>상태</label><select><option>전체</option><option>부족</option><option>여유</option></select></div>
+          <button type="button" class="btn btn-ghost btn-sm">필터 초기화</button>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi-card"><div class="label">관할 총 재고</div><div class="value">48,560</div></div>
+          <div class="kpi-card"><div class="label">부족 기관</div><div class="value">3</div></div>
+          <div class="kpi-card"><div class="label">여유 기관</div><div class="value">5</div></div>
+          <div class="kpi-card"><div class="label">오늘 추천 이동</div><div class="value">4</div></div>
+          <div class="kpi-card"><div class="label">재분배 완료율</div><div class="value">82%</div></div>
+        </div>
+        <div data-tabs>
+          <div class="tabs">
+            <button type="button" class="tab-btn active" data-tab="tab-all">전체 재고</button>
+            <button type="button" class="tab-btn" data-tab="tab-org">기관별</button>
+            <button type="button" class="tab-btn" data-tab="tab-expiry">유효기한 임박</button>
+            <button type="button" class="tab-btn" data-tab="tab-predict">부족 예측</button>
+            <button type="button" class="tab-btn" data-tab="tab-redist" id="tab-redist-btn">재분배 추천</button>
+            <button type="button" class="tab-btn" data-tab="tab-history">재분배 이력</button>
+          </div>
+          <div id="tab-all" class="tab-panel active">
+            <div class="card"><div class="card-body"><table class="data-table"><thead><tr><th>백신</th><th>제조사</th><th>총 재고</th><th>일평균 사용</th><th>상태</th></tr></thead><tbody><tr><td>HPV 9가</td><td>MSD</td><td>32,100</td><td>820</td><td><span class="tag tag-success">정상</span></td></tr></tbody></table></div></div>
+          </div>
+          <div id="tab-org" class="tab-panel">
+            <div class="card"><div class="card-body"><table class="data-table"><thead><tr><th>기관</th><th>재고</th><th>안전재고</th><th>예상 소진</th></tr></thead><tbody><tr><td>구립○○병원</td><td>85</td><td>200</td><td>2026-05-22</td></tr><tr><td>△△의원</td><td>1,250</td><td>300</td><td>2026-07-01</td></tr></tbody></table></div></div>
+          </div>
+          <div id="tab-expiry" class="tab-panel">
+            <div class="card"><div class="card-body"><table class="data-table"><thead><tr><th>로트</th><th>유효기한</th><th>기관</th><th>잔량</th></tr></thead><tbody><tr><td>L-HPV-042</td><td>2026-06-12</td><td>△△의원</td><td>120</td></tr></tbody></table></div></div>
+          </div>
+          <div id="tab-predict" class="tab-panel">
+            <div class="card"><div class="card-body"><div class="chart-box"><canvas id="chartPredict"></canvas></div><p style="font-size:12px;color:var(--rtmc-muted)">예상 소진일 = 현재재고 ÷ 일평균 사용량 · 안전재고 = 일평균×7일</p></div></div>
+          </div>
+          <div id="tab-redist" class="tab-panel">
+            <div class="grid-2" style="margin-bottom:16px">
+              <div class="card"><div class="card-head"><h3>재고 부족 기관</h3></div><div class="card-body"><table class="data-table"><thead><tr><th>기관</th><th>현재</th><th>필요</th><th>소진예상</th></tr></thead><tbody><tr><td>구립○○병원</td><td>85</td><td>250</td><td>D+4</td></tr></tbody></table></div></div>
+              <div class="card"><div class="card-head"><h3>추천 매칭</h3></div><div class="card-body"><p>△△의원 → 구립○○병원 · HPV 250도즈 · 12.4km · 우선순위 1</p><div class="map-placeholder" style="min-height:180px;margin-top:12px">공급 가능 기관 지도</div></div></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h3>재분배 추천 상세 목록</h3></div>
+              <div class="card-body" style="padding:0">
+                <table class="data-table">
+                  <thead><tr><th>ID</th><th>백신</th><th>공급</th><th>수령</th><th>로트</th><th>수량</th><th>상태</th><th></th></tr></thead>
+                  <tbody>
+                    <tr><td>RD-20260518-001</td><td>HPV</td><td>△△의원</td><td>구립○○병원</td><td>L-HPV-042</td><td>250</td><td><span class="tag tag-muted">대기</span></td>
+                      <td><a class="btn btn-primary btn-sm" href="재분배-요청-상세.html">상세·승인</a></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div id="tab-history" class="tab-panel">
+            <div class="card"><div class="card-body"><table class="data-table"><thead><tr><th>완료일</th><th>ID</th><th>경로</th><th>수량</th></tr></thead><tbody><tr><td>2026-05-10</td><td>RD-20260510-003</td><td>남동구보건소 → ○○내과</td><td>100</td></tr></tbody></table></div></div>
+          </div>
+        </div>
+      </main>
+      <footer class="page-footer"><span>갱신 2026-05-18 10:30</span><span>© RTMC VD-IMS</span></footer>
+    </div>
+  </div>
+  <script src="prototype-shell.js"></script>
+  <script>
+    if (location.hash === "#tab-redist") {
+      document.querySelector('[data-tab="tab-redist"]').click();
+    }
+    new Chart(document.getElementById("chartPredict"), {
+      type: "line",
+      data: { labels: ["D+0","D+3","D+7","D+14"], datasets: [{ label: "구립○○병원 예상 재고", data: [85, 40, 0, 0], borderColor: "#e5484d", tension: 0.2 }] },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
+  </script>
+</body>
+</html>

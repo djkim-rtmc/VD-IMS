@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>통합 대시보드 · VD-IMS 지역 관할</title>
+  <link rel="stylesheet" href="prototype-common.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="rail" aria-label="주 메뉴">
+      <div class="rail-logo" title="VD-IMS">VD</div>
+      <nav class="rail-nav">
+        <a class="rail-link active" href="통합-대시보드.html"><span class="rail-icon">📊</span>통합<br />대시보드</a>
+        <a class="rail-link" href="VD-IMS%20관할기관%20현황.html"><span class="rail-icon">🏥</span>관할<br />기관</a>
+        <a class="rail-link" href="재고-관리.html"><span class="rail-icon">💉</span>재고<br />관리</a>
+        <a class="rail-link" href="이상반응-관리.html"><span class="rail-icon">⚠️</span>이상<br />반응</a>
+        <a class="rail-link" href="알림-조치-관리.html"><span class="rail-icon">🔔</span>알림<br />조치</a>
+      </nav>
+    </aside>
+    <div class="main-wrap">
+      <header class="top-header">
+        <div class="header-title">VD-IMS <span>/ 인천광역시 남동구 관할 통합관제</span></div>
+        <div class="header-search"><input type="search" placeholder="기관·백신·사례 ID 검색" aria-label="검색" /></div>
+        <div class="header-actions">
+          <div class="header-badge" title="알림"><span>🔔</span><span class="dot"></span></div>
+          <div class="user-chip"><span class="avatar">김</span><div><strong>김보건</strong><br /><span style="color:var(--rtmc-muted);font-size:11px">남동구보건소</span></div></div>
+        </div>
+      </header>
+      <main class="page-content">
+        <div class="page-head">
+          <div>
+            <h1>통합 대시보드</h1>
+            <p class="sub">관할 25개 위탁의료기관 · 접종·재고·이상반응 KPI (목 데이터)</p>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm">필터 초기화</button>
+        </div>
+        <div class="filter-bar">
+          <div class="filter-group"><label>지역</label><select><option>남동구 전체</option></select></div>
+          <div class="filter-group"><label>기간</label><input type="date" value="2026-05-12" /> ~ <input type="date" value="2026-05-18" /></div>
+          <div class="filter-group"><label>백신</label><select><option>전체</option><option>HPV</option><option>독감</option></select></div>
+          <div class="filter-group"><label>기관 유형</label><select><option>전체</option><option>보건소</option><option>위탁의료</option></select></div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi-card"><div class="label">관할 기관</div><div class="value">25</div><div class="delta neutral">위탁의료 24 + 보건소</div></div>
+          <div class="kpi-card"><div class="label">금일 접종</div><div class="value">842</div><div class="delta up">▲ 8.4% 전일</div></div>
+          <div class="kpi-card"><div class="label">현재 재고</div><div class="value">48,560</div><div class="delta up">도즈 · ▲ 2.1%</div></div>
+          <div class="kpi-card"><div class="label">재고 부족 기관</div><div class="value">3</div><div class="delta up">▲ 1</div></div>
+          <div class="kpi-card"><div class="label">이상반응 접수(7일)</div><div class="value">18</div><div class="delta up">▲ 15.3%</div></div>
+          <div class="kpi-card"><div class="label">유효기한 임박</div><div class="value">5</div><div class="delta up">30일 이내 로트</div></div>
+          <div class="kpi-card"><div class="label">자가체크 미응답</div><div class="value">12</div><div class="delta up">4회(3·48·72·168h)</div></div>
+          <div class="kpi-card"><div class="label">조치 필요</div><div class="value">7</div><div class="delta up"><a href="알림-조치-관리.html">알림함 →</a></div></div>
+        </div>
+        <div class="grid-2-1" style="margin-bottom:16px">
+          <div class="card">
+            <div class="card-head"><h2>관할 지역 맵</h2><a href="VD-IMS%20관할기관%20현황.html">기관 목록</a></div>
+            <div class="card-body">
+              <div class="map-placeholder">
+                남동구 관할 의료기관 분포 (프로토타입)
+                <span class="map-pin ok" style="left:35%;top:45%"></span>
+                <span class="map-pin warn" style="left:55%;top:38%"></span>
+                <span class="map-pin danger" style="left:48%;top:62%"></span>
+              </div>
+              <p style="font-size:12px;color:var(--rtmc-muted);margin:10px 0 0">● 정상 ○ 여유 ▲ 부족 ■ 위험 · <a href="기관-상세.html">○○의원 상세</a></p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>위험 알림 / 조치 필요</h2><a href="알림-조치-관리.html">전체 보기</a></div>
+            <div class="card-body">
+              <ul class="alert-list">
+                <li><span class="tag tag-danger">위험</span><div><strong>재고 부족</strong> — 구립○○병원 · HPV D+4 예상 소진<br /><a href="재고-관리.html">재분배 추천</a></div></li>
+                <li><span class="tag tag-warning">경고</span><div><strong>유효기한 임박</strong> — △△의원 로트 L-HPV-042</div></li>
+                <li><span class="tag tag-warning">경고</span><div><strong>이상반응 증가</strong> — ○○내과 · 주간 +40%</div></li>
+                <li><span class="tag tag-muted">주의</span><div><strong>자가체크 미응답</strong> — 48h 구간 5명</div></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="card"><div class="card-head"><h3>접종 추이</h3></div><div class="card-body"><div class="chart-box"><canvas id="chartVax"></canvas></div></div></div>
+          <div class="card"><div class="card-head"><h3>재고 추이</h3></div><div class="card-body"><div class="chart-box"><canvas id="chartStock"></canvas></div></div></div>
+          <div class="card"><div class="card-head"><h3>이상반응 추이</h3></div><div class="card-body"><div class="chart-box"><canvas id="chartAe"></canvas></div></div></div>
+        </div>
+        <div class="card" style="margin-top:16px">
+          <div class="card-head"><h2>재분배 추천 요약</h2><a href="재고-관리.html#tab-redist">상세보기</a></div>
+          <div class="card-body" style="display:flex;gap:24px;flex-wrap:wrap;font-size:13px">
+            <span>부족 기관 <strong>3</strong></span>
+            <span>여유 기관 <strong>5</strong></span>
+            <span>추천 이동 <strong>4</strong>건</span>
+            <a class="btn btn-primary btn-sm" href="재분배-요청-상세.html">재분배 요청 상세 (8단계)</a>
+          </div>
+        </div>
+        <p class="policy-note">VD-IMS 정책: 이용자 UI에 AI Level 미노출 · 의료진만 심각도 참고 분류 확인 · KOI 비대면 상담은 상태값만 VD-IMS 보관</p>
+      </main>
+      <footer class="page-footer"><span>데이터 갱신 2026-05-18 10:30 · 선택 필터 기준 집계</span><span>© RTMC VD-IMS 실증 · 남동구보건소 관할</span></footer>
+    </div>
+  </div>
+  <script>
+    var labels = ["05.12","05.13","05.14","05.15","05.16","05.17","05.18"];
+    var opts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } };
+    new Chart(document.getElementById("chartVax"), { type: "line", data: { labels: labels, datasets: [{ label: "금일", data: [720,810,780,842,790,820,842], borderColor: "#1e5eff", tension: 0.3 }, { label: "전주 동일", data: [680,700,710,730,740,750,760], borderColor: "#9ca3af", borderDash: [4,4], tension: 0.3 }] }, options: opts });
+    new Chart(document.getElementById("chartStock"), { type: "bar", data: { labels: labels, datasets: [{ label: "재고(천 도즈)", data: [47,48,47,49,48,48,49], backgroundColor: "#6366f1" }] }, options: opts });
+    new Chart(document.getElementById("chartAe"), { type: "line", data: { labels: labels, datasets: [{ label: "접수", data: [2,3,2,4,3,2,2], borderColor: "#e5484d", tension: 0.3 }] }, options: opts });
+  </script>
+</body>
+</html>
