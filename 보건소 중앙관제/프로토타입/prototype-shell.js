@@ -12,6 +12,9 @@
         panels.forEach(function (p) {
           p.classList.toggle("active", p.id === id);
         });
+        document.dispatchEvent(
+          new CustomEvent("prototype-tab-shown", { detail: { id: id } }),
+        );
       });
     });
   });

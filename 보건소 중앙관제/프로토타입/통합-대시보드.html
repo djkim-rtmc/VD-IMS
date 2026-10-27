@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" href="data:," />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>통합 대시보드 · VD-IMS 지역 관할</title>
   <link rel="stylesheet" href="prototype-common.css" />
@@ -24,7 +25,7 @@
         <div class="header-title">VD-IMS <span>/ 인천광역시 남동구 관할 통합관제</span></div>
         <div class="header-search"><input type="search" placeholder="기관·백신·사례 ID 검색" aria-label="검색" /></div>
         <div class="header-actions">
-          <div class="header-badge" title="알림"><span>🔔</span><span class="dot"></span></div>
+          <a class="header-badge" href="알림-조치-관리.html" title="알림"><span>🔔</span><span class="dot"></span></a>
           <div class="user-chip"><span class="avatar">김</span><div><strong>김보건</strong><br /><span style="color:var(--rtmc-muted);font-size:11px">남동구보건소</span></div></div>
         </div>
       </header>
@@ -97,11 +98,13 @@
     </div>
   </div>
   <script>
-    var labels = ["05.12","05.13","05.14","05.15","05.16","05.17","05.18"];
-    var opts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } };
-    new Chart(document.getElementById("chartVax"), { type: "line", data: { labels: labels, datasets: [{ label: "금일", data: [720,810,780,842,790,820,842], borderColor: "#1e5eff", tension: 0.3 }, { label: "전주 동일", data: [680,700,710,730,740,750,760], borderColor: "#9ca3af", borderDash: [4,4], tension: 0.3 }] }, options: opts });
-    new Chart(document.getElementById("chartStock"), { type: "bar", data: { labels: labels, datasets: [{ label: "재고(천 도즈)", data: [47,48,47,49,48,48,49], backgroundColor: "#6366f1" }] }, options: opts });
-    new Chart(document.getElementById("chartAe"), { type: "line", data: { labels: labels, datasets: [{ label: "접수", data: [2,3,2,4,3,2,2], borderColor: "#e5484d", tension: 0.3 }] }, options: opts });
+    if (typeof Chart !== "undefined") {
+      var labels = ["05.12","05.13","05.14","05.15","05.16","05.17","05.18"];
+      var opts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } };
+      new Chart(document.getElementById("chartVax"), { type: "line", data: { labels: labels, datasets: [{ label: "금일", data: [720,810,780,842,790,820,842], borderColor: "#1e5eff", tension: 0.3 }, { label: "전주 동일", data: [680,700,710,730,740,750,760], borderColor: "#9ca3af", borderDash: [4,4], tension: 0.3 }] }, options: opts });
+      new Chart(document.getElementById("chartStock"), { type: "bar", data: { labels: labels, datasets: [{ label: "재고(천 도즈)", data: [47,48,47,49,48,48,49], backgroundColor: "#6366f1" }] }, options: opts });
+      new Chart(document.getElementById("chartAe"), { type: "line", data: { labels: labels, datasets: [{ label: "접수", data: [2,3,2,4,3,2,2], borderColor: "#e5484d", tension: 0.3 }] }, options: opts });
+    }
   </script>
 </body>
 </html>

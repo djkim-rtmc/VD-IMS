@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" href="data:," />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>기관 상세 · VD-IMS</title>
   <link rel="stylesheet" href="prototype-common.css" />
@@ -63,8 +64,10 @@
     </div>
   </div>
   <script>
-    new Chart(document.getElementById("orgVax"), { type: "bar", data: { labels: ["월","화","수","목","금"], datasets: [{ data: [32,40,35,38,42], backgroundColor: "#1e5eff" }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
-    new Chart(document.getElementById("orgAe"), { type: "doughnut", data: { labels: ["경증","중등","중증"], datasets: [{ data: [3,1,0], backgroundColor: ["#d1d5db","#f5a623","#e5484d"] }] }, options: { responsive: true, maintainAspectRatio: false } });
+    if (typeof Chart !== "undefined") {
+      new Chart(document.getElementById("orgVax"), { type: "bar", data: { labels: ["월","화","수","목","금"], datasets: [{ data: [32,40,35,38,42], backgroundColor: "#1e5eff" }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
+      new Chart(document.getElementById("orgAe"), { type: "doughnut", data: { labels: ["경증","중등","중증"], datasets: [{ data: [3,1,0], backgroundColor: ["#d1d5db","#f5a623","#e5484d"] }] }, options: { responsive: true, maintainAspectRatio: false } });
+    }
   </script>
 </body>
 </html>

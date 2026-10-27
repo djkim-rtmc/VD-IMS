@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" href="data:," />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>재고 관리 · VD-IMS</title>
   <link rel="stylesheet" href="prototype-common.css" />
@@ -91,14 +92,26 @@
   </div>
   <script src="prototype-shell.js"></script>
   <script>
+    var predictChart = null;
+    function initPredictChart() {
+      if (predictChart || typeof Chart === "undefined") return;
+      var el = document.getElementById("chartPredict");
+      if (!el) return;
+      predictChart = new Chart(el, {
+        type: "line",
+        data: { labels: ["D+0","D+3","D+7","D+14"], datasets: [{ label: "구립○○병원 예상 재고", data: [85, 40, 0, 0], borderColor: "#e5484d", tension: 0.2 }] },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+    }
+    document.addEventListener("prototype-tab-shown", function (e) {
+      if (e.detail && e.detail.id === "tab-predict") {
+        initPredictChart();
+        if (predictChart) predictChart.resize();
+      }
+    });
     if (location.hash === "#tab-redist") {
       document.querySelector('[data-tab="tab-redist"]').click();
     }
-    new Chart(document.getElementById("chartPredict"), {
-      type: "line",
-      data: { labels: ["D+0","D+3","D+7","D+14"], datasets: [{ label: "구립○○병원 예상 재고", data: [85, 40, 0, 0], borderColor: "#e5484d", tension: 0.2 }] },
-      options: { responsive: true, maintainAspectRatio: false }
-    });
   </script>
 </body>
 </html>

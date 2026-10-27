@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" href="data:," />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>이상반응 관리 · VD-IMS</title>
   <link rel="stylesheet" href="prototype-common.css" />
@@ -48,8 +49,8 @@
         </div>
         <div class="card">
           <div class="card-head"><h2>이상반응 사례 모니터링</h2><span class="tag tag-muted">Level 용어 비노출 · 의료진 UI</span></div>
-          <div class="card-body" style="padding:0;overflow:auto">
-            <table class="data-table">
+          <div class="card-body card-body--scroll" style="padding:0">
+            <table class="data-table data-table--wide">
               <thead>
                 <tr>
                   <th>사례 ID</th><th>기관</th><th>백신</th><th>증상</th><th>심각도(의료진 참고)</th><th>3h</th><th>48h</th><th>72h</th><th>168h</th><th>KOI 상태</th><th>담당</th><th></th>
@@ -76,10 +77,12 @@
     </div>
   </div>
   <script>
-    var o = { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } };
-    new Chart(document.getElementById("aeTrend"), { type: "line", data: { labels: ["월","화","수","목","금","토","일"], datasets: [{ label: "신고", data: [2,3,2,4,2,2,3], borderColor: "#1e5eff" }, { label: "주의", data: [0,1,0,1,1,0,0], borderColor: "#e5484d" }] }, options: o });
-    new Chart(document.getElementById("aeSymptom"), { type: "doughnut", data: { labels: ["두통","근육통","발열","기타"], datasets: [{ data: [26,18,16,40], backgroundColor: ["#1e5eff","#6366f1","#f5a623","#d1d5db"] }] }, options: o });
-    new Chart(document.getElementById("aeDemo"), { type: "bar", data: { labels: ["10대","20–39","40–64","65+"], datasets: [{ label: "남", data: [1,4,2,1], backgroundColor: "#1e5eff" }, { label: "여", data: [2,5,2,1], backgroundColor: "#a5b4fc" }] }, options: o });
+    if (typeof Chart !== "undefined") {
+      var o = { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } };
+      new Chart(document.getElementById("aeTrend"), { type: "line", data: { labels: ["월","화","수","목","금","토","일"], datasets: [{ label: "신고", data: [2,3,2,4,2,2,3], borderColor: "#1e5eff" }, { label: "주의", data: [0,1,0,1,1,0,0], borderColor: "#e5484d" }] }, options: o });
+      new Chart(document.getElementById("aeSymptom"), { type: "doughnut", data: { labels: ["두통","근육통","발열","기타"], datasets: [{ data: [26,18,16,40], backgroundColor: ["#1e5eff","#6366f1","#f5a623","#d1d5db"] }] }, options: o });
+      new Chart(document.getElementById("aeDemo"), { type: "bar", data: { labels: ["10대","20–39","40–64","65+"], datasets: [{ label: "남", data: [1,4,2,1], backgroundColor: "#1e5eff" }, { label: "여", data: [2,5,2,1], backgroundColor: "#a5b4fc" }] }, options: o });
+    }
   </script>
 </body>
 </html>

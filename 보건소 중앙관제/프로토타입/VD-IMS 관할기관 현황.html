@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" href="data:," />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>관할기관 현황 · VD-IMS</title>
   <link rel="stylesheet" href="prototype-common.css" />
@@ -24,7 +25,7 @@
         <div class="header-title">VD-IMS <span>/ 관할기관 현황</span></div>
         <div class="header-search"><input type="search" placeholder="기관명 검색" /></div>
         <div class="header-actions">
-          <div class="header-badge"><span>🔔</span><span class="dot"></span></div>
+          <a class="header-badge" href="알림-조치-관리.html" title="알림"><span>🔔</span><span class="dot"></span></a>
           <div class="user-chip"><span class="avatar">김</span><div><strong>김보건</strong><br /><span style="color:var(--rtmc-muted);font-size:11px">남동구보건소</span></div></div>
         </div>
       </header>
@@ -135,18 +136,28 @@
     (function () {
       var links = document.querySelectorAll(".subnav a");
       var panels = document.querySelectorAll(".sub-panel");
+      var orgVaxChart = null;
+      function initOrgVaxChart() {
+        if (orgVaxChart || typeof Chart === "undefined") return;
+        var el = document.getElementById("chartOrgVax");
+        if (!el) return;
+        orgVaxChart = new Chart(el, {
+          type: "bar",
+          data: { labels: ["월","화","수","목","금","토","일"], datasets: [{ label: "접종 건수", data: [110,120,105,124,118,90,85], backgroundColor: "#1e5eff" }] },
+          options: { responsive: true, maintainAspectRatio: false }
+        });
+      }
       links.forEach(function (a) {
         a.addEventListener("click", function (e) {
           e.preventDefault();
           var id = a.getAttribute("data-sub");
           links.forEach(function (l) { l.classList.toggle("active", l === a); });
           panels.forEach(function (p) { p.hidden = p.id !== id; });
+          if (id === "panel-vax") {
+            initOrgVaxChart();
+            if (orgVaxChart) orgVaxChart.resize();
+          }
         });
-      });
-      new Chart(document.getElementById("chartOrgVax"), {
-        type: "bar",
-        data: { labels: ["월","화","수","목","금","토","일"], datasets: [{ label: "접종 건수", data: [110,120,105,124,118,90,85], backgroundColor: "#1e5eff" }] },
-        options: { responsive: true, maintainAspectRatio: false }
       });
     })();
   </script>

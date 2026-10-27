@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" href="data:," />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>알림/조치 관리 · VD-IMS</title>
   <link rel="stylesheet" href="prototype-common.css" />
@@ -95,17 +96,22 @@
     </div>
   </div>
   <script>
-    new Chart(document.getElementById("alertType"), {
-      type: "bar",
-      data: { labels: ["재고","유효기한","이상반응","미수신"], datasets: [{ data: [30, 23, 18, 12], backgroundColor: "#6366f1" }] },
-      options: { indexAxis: "y", responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-    });
+    if (typeof Chart !== "undefined") {
+      new Chart(document.getElementById("alertType"), {
+        type: "bar",
+        data: { labels: ["재고","유효기한","이상반응","미수신"], datasets: [{ data: [30, 23, 18, 12], backgroundColor: "#6366f1" }] },
+        options: { indexAxis: "y", responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+      });
+    }
     var details = {
       "1": "<h3 style='margin:0 0 8px'>HPV 재고 부족 · 구립○○병원</h3><p style='font-size:13px'>권장 재분배 250도즈</p><a class='btn btn-primary btn-sm' href='재분배-요청-상세.html'>재분배 상세</a>",
       "2": "<h3 style='margin:0 0 8px'>이상반응 증가 · ○○내과</h3><p style='font-size:13px'>주간 +40% · <a href='이상반응-관리.html'>모니터링表</a></p>",
       "3": "<h3 style='margin:0 0 8px'>데이터 미수신</h3><p style='font-size:13px'>연동 재시도 완료</p>"
     };
     document.querySelectorAll("#alertTable tbody tr").forEach(function (row) {
+      row.querySelectorAll("input, a, button").forEach(function (el) {
+        el.addEventListener("click", function (e) { e.stopPropagation(); });
+      });
       row.addEventListener("click", function () {
         document.querySelectorAll("#alertTable tbody tr").forEach(function (r) { r.style.background = ""; });
         row.style.background = "#f9fafb";
