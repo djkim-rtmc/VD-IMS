@@ -4,15 +4,17 @@ VD-IMS **지역 보건 담당자**(인천 남동구보건소 관할) 관점의 �
 
 ## 열기
 
-1. 이 폴더에서 아래 파일을 더블클릭하거나, 로컬 HTTP 서버로 제공합니다.
-2. **시작점 권장:** [`통합-대시보드.html`](./통합-대시보드.html) 또는 [`VD-IMS 관할기관 현황.html`](./VD-IMS%20관할기관%20현황.html)
-3. 좌측 **72px 레일**에서 화면 간 이동 · 상대 경로 `href` 로 연결됨.
+**브랜치:** `git checkout cursor/rtmc-design-unify` 후 미리보기 (main만 보면 이전/다른 화면일 수 있음).
 
-**RTMC 디자인 시스템:** [`rtmc-prototype.css`](./rtmc-prototype.css) · [`rtmc-layout.css`](./rtmc-layout.css) · [`rtmc-shell.js`](./rtmc-shell.js)  
-(구 `prototype-common.css` / `prototype-shell.js`는 위 파일로 re-export · deprecated)
+1. [`index.html`](./index.html) 또는 **첨부 Claude 시안과 동일한 화면:** [`VD-IMS 관할기관 현황.html`](./VD-IMS%20관할기관%20현황.html)  
+   - **인라인 `<style>`** 포함 → `file://` 더블클릭·`http.server` 모두 동일 렌더링  
+   - 레포 루트 [`VD-IMS_관할기관현황_프로토타입.html`](../VD-IMS_관할기관현황_프로토타입.html)과 동일 시안 (+ 멀티페이지 `p:` 링크만 추가)
+2. **별도 IA (요약 KPI):** [`통합-대시보드.html`](./통합-대시보드.html) — 관할기관 풀 시안과 **다른 화면**임
+3. 그 외 페이지: [`rtmc-prototype.css`](./rtmc-prototype.css) · [`rtmc-layout.css`](./rtmc-layout.css) · [`rtmc-shell.js`](./rtmc-shell.js)
 
-**로컬 미리보기 (권장):** 저장소 루트 또는 이 폴더에서 `python3 -m http.server 8765` →  
-`http://127.0.0.1:8765/보건소%20중앙관제/cursor/html/통합-대시보드.html`
+**로컬 미리보기:** `cd` 이 폴더 → `python3 -m http.server 8765`  
+- 시안 비교: `http://127.0.0.1:8765/VD-IMS%20관할기관%20현황.html`  
+- 통합 대시보드: `http://127.0.0.1:8765/통합-대시보드.html`
 
 차트: Chart.js CDN (오프라인 시 차트 영역만 비어 있을 수 있음).
 
