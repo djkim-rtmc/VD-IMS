@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="data:," />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>기관 상세 · VD-IMS</title>
+  <link rel="stylesheet" href="prototype-common.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="rail">
+      <div class="rail-logo">VD</div>
+      <nav class="rail-nav">
+        <a class="rail-link" href="통합-대시보드.html"><span class="rail-icon">📊</span>통합<br />대시보드</a>
+        <a class="rail-link active" href="VD-IMS%20관할기관%20현황.html"><span class="rail-icon">🏥</span>관할<br />기관</a>
+        <a class="rail-link" href="재고-관리.html"><span class="rail-icon">💉</span>재고<br />관리</a>
+        <a class="rail-link" href="이상반응-관리.html"><span class="rail-icon">⚠️</span>이상<br />반응</a>
+        <a class="rail-link" href="알림-조치-관리.html"><span class="rail-icon">🔔</span>알림<br />조치</a>
+      </nav>
+    </aside>
+    <div class="main-wrap">
+      <header class="top-header">
+        <div class="header-title">VD-IMS <span>/ 기관 상세</span></div>
+        <div class="header-actions"><div class="user-chip"><span class="avatar">김</span><strong>김보건</strong></div></div>
+      </header>
+      <main class="page-content">
+        <div class="breadcrumb"><a href="VD-IMS%20관할기관%20현황.html">관할기관</a> &gt; 기관 상세</div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-body" style="display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between">
+            <div>
+              <h1 style="margin:0 0 8px;font-size:20px">○○내과의원</h1>
+              <p style="margin:0;font-size:13px;color:var(--rtmc-text-secondary)">위탁의료 · 인천 남동구 논현로 88 · 담당 최○○ · 032-123-4567</p>
+              <p style="margin:8px 0 0"><span class="tag tag-success">운영 중</span> <span class="tag tag-success">연동 정상</span> · 최근 수신 2026-05-18 10:28</p>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button type="button" class="btn btn-secondary btn-sm">지도</button>
+              <a class="btn btn-secondary btn-sm" href="재분배-요청-상세.html">재분배 요청</a>
+              <a class="btn btn-secondary btn-sm" href="알림-조치-관리.html">조치 등록</a>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi-card"><div class="label">금일 접종</div><div class="value">38</div></div>
+          <div class="kpi-card"><div class="label">주간 접종</div><div class="value">214</div></div>
+          <div class="kpi-card"><div class="label">현재 재고</div><div class="value">420</div></div>
+          <div class="kpi-card"><div class="label">이상반응(7일)</div><div class="value">4</div></div>
+          <div class="kpi-card"><div class="label">자가체크 응답률</div><div class="value">88.1%</div></div>
+          <div class="kpi-card"><div class="label">유효기한 임박</div><div class="value">1</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="card"><div class="card-head"><h2>접종 현황</h2></div><div class="card-body"><div class="chart-box"><canvas id="orgVax"></canvas></div></div></div>
+          <div class="card"><div class="card-head"><h2>재고 현황</h2></div><div class="card-body" style="padding:0"><table class="data-table"><thead><tr><th>백신</th><th>로트</th><th>유효기한</th><th>재고</th><th>상태</th></tr></thead><tbody><tr><td>HPV</td><td>L-HPV-031</td><td>2026-08-01</td><td>320</td><td><span class="tag tag-success">정상</span></td></tr><tr><td>HPV</td><td>L-HPV-019</td><td>2026-06-02</td><td>100</td><td><span class="tag tag-warning">임박</span></td></tr></tbody></table></div></div>
+          <div class="card"><div class="card-head"><h2>이상반응</h2></div><div class="card-body"><div class="chart-box" style="height:180px"><canvas id="orgAe"></canvas></div></div></div>
+          <div class="card"><div class="card-head"><h2>조치 이력</h2></div><div class="card-body" style="padding:0"><table class="data-table"><thead><tr><th>일시</th><th>유형</th><th>내용</th><th>상태</th></tr></thead><tbody><tr><td>05-17</td><td>이상반응</td><td>주간 증가 모니터링</td><td><span class="tag tag-primary">진행</span></td></tr></tbody></table></div></div>
+        </div>
+        <div class="card" style="margin-top:16px">
+          <div class="card-head"><h2>재분배 추천</h2><a href="재고-관리.html#tab-redist">전체 추천</a></div>
+          <div class="card-body"><p style="font-size:13px">수요: 300 도즈 (△△의원 공급 추천) · 유효기한·수요 예측 기준</p></div>
+        </div>
+      </main>
+      <footer class="page-footer"><span><a href="VD-IMS%20관할기관%20현황.html">← 관할기관 목록</a></span><span>© RTMC VD-IMS</span></footer>
+    </div>
+  </div>
+  <script>
+    if (typeof Chart !== "undefined") {
+      new Chart(document.getElementById("orgVax"), { type: "bar", data: { labels: ["월","화","수","목","금"], datasets: [{ data: [32,40,35,38,42], backgroundColor: "#1e5eff" }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
+      new Chart(document.getElementById("orgAe"), { type: "doughnut", data: { labels: ["경증","중등","중증"], datasets: [{ data: [3,1,0], backgroundColor: ["#d1d5db","#f5a623","#e5484d"] }] }, options: { responsive: true, maintainAspectRatio: false } });
+    }
+  </script>
+</body>
+</html>
