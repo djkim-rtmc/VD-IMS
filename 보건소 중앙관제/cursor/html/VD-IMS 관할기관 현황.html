@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="data:," />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>관할기관 현황 · VD-IMS</title>
+  <link rel="stylesheet" href="prototype-common.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="rail" aria-label="주 메뉴">
+      <div class="rail-logo">VD</div>
+      <nav class="rail-nav">
+        <a class="rail-link" href="통합-대시보드.html"><span class="rail-icon">📊</span>통합<br />대시보드</a>
+        <a class="rail-link active" href="VD-IMS%20관할기관%20현황.html"><span class="rail-icon">🏥</span>관할<br />기관</a>
+        <a class="rail-link" href="재고-관리.html"><span class="rail-icon">💉</span>재고<br />관리</a>
+        <a class="rail-link" href="이상반응-관리.html"><span class="rail-icon">⚠️</span>이상<br />반응</a>
+        <a class="rail-link" href="알림-조치-관리.html"><span class="rail-icon">🔔</span>알림<br />조치</a>
+      </nav>
+    </aside>
+    <div class="main-wrap">
+      <header class="top-header">
+        <div class="header-title">VD-IMS <span>/ 관할기관 현황</span></div>
+        <div class="header-search"><input type="search" placeholder="기관명 검색" /></div>
+        <div class="header-actions">
+          <a class="header-badge" href="알림-조치-관리.html" title="알림"><span>🔔</span><span class="dot"></span></a>
+          <div class="user-chip"><span class="avatar">김</span><div><strong>김보건</strong><br /><span style="color:var(--rtmc-muted);font-size:11px">남동구보건소</span></div></div>
+        </div>
+      </header>
+      <main class="page-content">
+        <div class="page-head">
+          <div>
+            <h1>관할기관 현황</h1>
+            <p class="sub">위탁의료기관 25곳 · 실시간 연동 상태·접종·재고·자가체크 응답률</p>
+          </div>
+          <a class="btn btn-secondary btn-sm" href="통합-대시보드.html">통합 대시보드</a>
+        </div>
+        <nav class="subnav" aria-label="관할기관 하위 메뉴">
+          <a href="#panel-overview" class="active" data-sub="panel-overview">관할기관 현황</a>
+          <a href="#panel-list" data-sub="panel-list">기관 목록</a>
+          <a href="#panel-vax" data-sub="panel-vax">접종</a>
+          <a href="#panel-stock" data-sub="panel-stock">재고</a>
+          <a href="#panel-expiry" data-sub="panel-expiry">유효기한</a>
+          <a href="#panel-ae" data-sub="panel-ae">이상반응</a>
+        </nav>
+        <div id="panel-overview" class="sub-panel">
+          <div class="kpi-row">
+            <div class="kpi-card"><div class="label">연동 정상</div><div class="value">23</div></div>
+            <div class="kpi-card"><div class="label">데이터 지연</div><div class="value">2</div></div>
+            <div class="kpi-card"><div class="label">금일 접종 합계</div><div class="value">842</div></div>
+            <div class="kpi-card"><div class="label">재고 경고</div><div class="value">3</div></div>
+          </div>
+          <div class="grid-2-1">
+            <div class="card">
+              <div class="card-head"><h2>관할 지도</h2></div>
+              <div class="card-body"><div class="map-placeholder">남동구 관할 · 클릭 시 기관 상세<div class="map-pin ok" style="left:40%;top:50%"></div></div></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h2>주의 기관</h2></div>
+              <div class="card-body">
+                <ul class="alert-list">
+                  <li><span class="tag tag-danger">부족</span> 구립○○병원</li>
+                  <li><span class="tag tag-warning">임박</span> △△의원</li>
+                  <li><span class="tag tag-warning">미응답</span> ○○내과 · 자가체크 48h</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="panel-list" class="sub-panel" hidden>
+          <div class="filter-bar">
+            <div class="filter-group"><label>상태</label><select><option>전체</option><option>연동 정상</option><option>지연</option></select></div>
+            <div class="filter-group"><label>유형</label><select><option>위탁의료</option><option>보건소</option></select></div>
+          </div>
+          <div class="card">
+            <div class="card-body" style="padding:0;overflow:auto">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>기관명</th><th>유형</th><th>연동</th><th>금일 접종</th><th>재고(도즈)</th><th>자가체크 응답률</th><th>이상반응(7일)</th><th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>남동구보건소</td><td>보건소</td><td><span class="tag tag-success">정상</span></td><td>124</td><td>12,400</td><td>94.2%</td><td>2</td>
+                    <td><button type="button" class="btn btn-ghost btn-sm" data-open-modal="#modalOrg">요약</button> <a class="btn btn-primary btn-sm" href="기관-상세.html">상세</a></td>
+                  </tr>
+                  <tr>
+                    <td>○○내과의원</td><td>위탁</td><td><span class="tag tag-success">정상</span></td><td>38</td><td>420</td><td>88.1%</td><td>4</td>
+                    <td><button type="button" class="btn btn-ghost btn-sm" data-open-modal="#modalOrg">요약</button> <a class="btn btn-primary btn-sm" href="기관-상세.html">상세</a></td>
+                  </tr>
+                  <tr>
+                    <td>구립○○병원</td><td>위탁</td><td><span class="tag tag-warning">지연</span></td><td>52</td><td>85</td><td>91.0%</td><td>1</td>
+                    <td><a class="btn btn-primary btn-sm" href="기관-상세.html">상세</a></td>
+                  </tr>
+                  <tr>
+                    <td>△△가정의학과</td><td>위탁</td><td><span class="tag tag-success">정상</span></td><td>29</td><td>1,850</td><td>93.5%</td><td>0</td>
+                    <td><a class="btn btn-primary btn-sm" href="기관-상세.html">상세</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="panel-vax" class="sub-panel" hidden>
+          <div class="card"><div class="card-head"><h2>관할 접종 추이</h2></div><div class="card-body"><div class="chart-box tall"><canvas id="chartOrgVax"></canvas></div></div></div>
+        </div>
+        <div id="panel-stock" class="sub-panel" hidden>
+          <p style="margin-bottom:12px"><a href="재고-관리.html">재고 관리 허브 →</a></p>
+          <div class="card"><div class="card-body"><table class="data-table"><thead><tr><th>기관</th><th>백신</th><th>재고</th><th>예상 소진</th><th>상태</th></tr></thead><tbody><tr><td>구립○○병원</td><td>HPV</td><td>85</td><td>D+4</td><td><span class="tag tag-danger">부족</span></td></tr><tr><td>△△의원</td><td>HPV</td><td>1,250</td><td>D+45</td><td><span class="tag tag-success">여유</span></td></tr></tbody></table></div></div>
+        </div>
+        <div id="panel-expiry" class="sub-panel" hidden>
+          <div class="card"><div class="card-body"><table class="data-table"><thead><tr><th>기관</th><th>로트</th><th>유효기한</th><th>잔량</th></tr></thead><tbody><tr><td>△△의원</td><td>L-HPV-042</td><td>2026-06-12</td><td>120</td></tr></tbody></table></div></div>
+        </div>
+        <div id="panel-ae" class="sub-panel" hidden>
+          <p style="margin-bottom:12px"><a href="이상반응-관리.html">이상반응 관리 전체 화면 →</a></p>
+          <div class="card"><div class="card-body"><table class="data-table"><thead><tr><th>기관</th><th>증상</th><th>심각도(의료진 참고)</th><th>자가체크</th><th>KOI 상담 상태</th></tr></thead><tbody><tr><td>○○내과</td><td>두통·근육통</td><td><span class="tag tag-muted">참고 분류 B</span></td><td>3·48h 응답</td><td><span class="tag tag-primary">예약확정</span></td></tr></tbody></table></div></div>
+        </div>
+      </main>
+      <footer class="page-footer"><span>갱신 2026-05-18 10:30</span><span>© RTMC VD-IMS</span></footer>
+    </div>
+  </div>
+  <div class="modal-overlay" id="modalOrg" role="dialog" aria-labelledby="modalOrgTitle">
+    <div class="modal">
+      <div class="modal-head"><h2 id="modalOrgTitle">○○내과의원 · 요약</h2><button type="button" class="btn btn-ghost btn-sm" data-close-modal>닫기</button></div>
+      <div class="modal-body">
+        <p>금일 접종 38 · HPV 재고 420 도즈 · 자가체크 응답률 88.1%</p>
+        <p style="margin-top:12px"><a href="기관-상세.html">기관 상세 페이지로 이동 →</a></p>
+      </div>
+    </div>
+  </div>
+  <script src="prototype-shell.js"></script>
+  <script>
+    (function () {
+      var links = document.querySelectorAll(".subnav a");
+      var panels = document.querySelectorAll(".sub-panel");
+      var orgVaxChart = null;
+      function initOrgVaxChart() {
+        if (orgVaxChart || typeof Chart === "undefined") return;
+        var el = document.getElementById("chartOrgVax");
+        if (!el) return;
+        orgVaxChart = new Chart(el, {
+          type: "bar",
+          data: { labels: ["월","화","수","목","금","토","일"], datasets: [{ label: "접종 건수", data: [110,120,105,124,118,90,85], backgroundColor: "#1e5eff" }] },
+          options: { responsive: true, maintainAspectRatio: false }
+        });
+      }
+      links.forEach(function (a) {
+        a.addEventListener("click", function (e) {
+          e.preventDefault();
+          var id = a.getAttribute("data-sub");
+          links.forEach(function (l) { l.classList.toggle("active", l === a); });
+          panels.forEach(function (p) { p.hidden = p.id !== id; });
+          if (id === "panel-vax") {
+            initOrgVaxChart();
+            if (orgVaxChart) orgVaxChart.resize();
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
