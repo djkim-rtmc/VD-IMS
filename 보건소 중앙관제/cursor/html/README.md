@@ -8,7 +8,12 @@ VD-IMS **지역 보건 담당자**(인천 남동구보건소 관할) 관점의 �
 2. **시작점 권장:** [`통합-대시보드.html`](./통합-대시보드.html) 또는 [`VD-IMS 관할기관 현황.html`](./VD-IMS%20관할기관%20현황.html)
 3. 좌측 **72px 레일**에서 화면 간 이동 · 상대 경로 `href` 로 연결됨.
 
-공통 스타일: [`prototype-common.css`](./prototype-common.css) · 탭/모달: [`prototype-shell.js`](./prototype-shell.js)  
+**RTMC 디자인 시스템:** [`rtmc-prototype.css`](./rtmc-prototype.css) · [`rtmc-layout.css`](./rtmc-layout.css) · [`rtmc-shell.js`](./rtmc-shell.js)  
+(구 `prototype-common.css` / `prototype-shell.js`는 위 파일로 re-export · deprecated)
+
+**로컬 미리보기 (권장):** 저장소 루트 또는 이 폴더에서 `python3 -m http.server 8765` →  
+`http://127.0.0.1:8765/보건소%20중앙관제/cursor/html/통합-대시보드.html`
+
 차트: Chart.js CDN (오프라인 시 차트 영역만 비어 있을 수 있음).
 
 ## 파일 인덱스

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # cursor/html -> ../프로토타입
-set -euo pipefail
+set -eu
+set -o pipefail 2>/dev/null || true
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SRC="$(dirname "$0")/html"
 DST="$ROOT/프로토타입"

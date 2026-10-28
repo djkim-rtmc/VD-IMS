@@ -29,7 +29,8 @@ cd html
 python -m http.server 8765
 ```
 
-Browser: `http://127.0.0.1:8765/통합-대시보드.html`  
+Browser: `http://127.0.0.1:8765/통합-대시보드.html` (또는 repo 루트에서 서버 시 `…/보건소%20중앙관제/cursor/html/통합-대시보드.html`)  
+**RTMC 통일 디자인:** `rtmc-prototype.css` + `rtmc-layout.css` · 72px 핑크 레일 · Spoqa Han Sans Neo.  
 수정 → 저장 → 새로고침.
 
 자세히: [html/로컬-라이브-미리보기.md](./html/로컬-라이브-미리보기.md) (복사본) · [워크플로-로컬-GitHub.md](./워크플로-로컬-GitHub.md)

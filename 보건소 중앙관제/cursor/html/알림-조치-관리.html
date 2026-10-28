@@ -1,123 +1,104 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" href="data:," />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>알림/조치 관리 · VD-IMS</title>
-  <link rel="stylesheet" href="prototype-common.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/css/SpoqaHanSansNeo.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="rtmc-prototype.css">
+<link rel="stylesheet" href="rtmc-layout.css">
+<title>알림/조치 관리 · VD-IMS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
-<body>
-  <div class="app-shell">
-    <aside class="rail">
-      <div class="rail-logo">VD</div>
-      <nav class="rail-nav">
-        <a class="rail-link" href="통합-대시보드.html"><span class="rail-icon">📊</span>통합<br />대시보드</a>
-        <a class="rail-link" href="VD-IMS%20관할기관%20현황.html"><span class="rail-icon">🏥</span>관할<br />기관</a>
-        <a class="rail-link" href="재고-관리.html"><span class="rail-icon">💉</span>재고<br />관리</a>
-        <a class="rail-link" href="이상반응-관리.html"><span class="rail-icon">⚠️</span>이상<br />반응</a>
-        <a class="rail-link active" href="알림-조치-관리.html"><span class="rail-icon">🔔</span>알림<br />조치</a>
-      </nav>
-    </aside>
-    <div class="main-wrap">
-      <header class="top-header">
-        <div class="header-title">VD-IMS <span>/ 알림·조치 관리</span></div>
-        <div class="header-search"><input type="search" placeholder="알림 검색" /></div>
-        <div class="header-actions"><div class="user-chip"><span class="avatar">김</span><strong>김보건</strong></div></div>
-      </header>
-      <main class="page-content">
-        <div class="page-head">
-          <div><h1>알림 / 조치 관리</h1><p class="sub">재고·유효기한·이상반응·데이터 미수신 통합 알림함</p></div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button type="button" class="btn btn-secondary btn-sm">확인 처리</button>
-            <button type="button" class="btn btn-secondary btn-sm">담당자 지정</button>
-            <button type="button" class="btn btn-primary btn-sm">조치 등록</button>
-            <a class="btn btn-secondary btn-sm" href="재분배-요청-상세.html">재분배 요청</a>
-          </div>
-        </div>
-        <div class="filter-bar">
-          <div class="filter-group"><label>유형</label><select><option>전체</option><option>재고 부족</option><option>이상반응</option></select></div>
-          <div class="filter-group"><label>심각도</label><select><option>전체</option></select></div>
-          <div class="filter-group"><label>상태</label><select><option>미확인</option><option>처리중</option></select></div>
-          <div class="filter-group"><label>기간</label><input type="date" value="2026-05-12" /> ~ <input type="date" value="2026-05-18" /></div>
-        </div>
-        <div class="kpi-row">
-          <div class="kpi-card"><div class="label">전체 알림</div><div class="value">47</div></div>
-          <div class="kpi-card"><div class="label">미확인</div><div class="value">8</div></div>
-          <div class="kpi-card"><div class="label">처리중</div><div class="value">14</div></div>
-          <div class="kpi-card"><div class="label">완료</div><div class="value">25</div></div>
-          <div class="kpi-card"><div class="label">평균 처리</div><div class="value">3h 42m</div></div>
-        </div>
-        <div class="grid-2-1">
-          <div class="card">
-            <div class="card-head"><h2>알림 목록</h2></div>
-            <div class="card-body" style="padding:0">
-              <table class="data-table" id="alertTable">
-                <thead><tr><th></th><th>유형</th><th>기관</th><th>발생</th><th>심각도</th><th>상태</th></tr></thead>
-                <tbody>
-                  <tr data-alert="1" style="cursor:pointer;background:#f9fafb">
-                    <td><input type="checkbox" /></td><td>재고 부족</td><td>구립○○병원</td><td>05-18 09:10</td><td><span class="tag tag-danger">상</span></td><td><span class="tag tag-warning">미확인</span></td>
-                  </tr>
-                  <tr data-alert="2" style="cursor:pointer">
-                    <td><input type="checkbox" /></td><td>이상반응 증가</td><td>○○내과</td><td>05-17 16:22</td><td><span class="tag tag-warning">중</span></td><td><span class="tag tag-primary">처리중</span></td>
-                  </tr>
-                  <tr data-alert="3" style="cursor:pointer">
-                    <td><input type="checkbox" /></td><td>데이터 미수신</td><td>□□ Clinic</td><td>05-17 08:00</td><td><span class="tag tag-muted">하</span></td><td><span class="tag tag-success">완료</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-head"><h2>조치 상세</h2></div>
-            <div class="card-body" id="alertDetail">
-              <h3 style="margin:0 0 8px">HPV 재고 부족 · 구립○○병원</h3>
-              <p style="font-size:13px;color:var(--rtmc-text-secondary)">로트 L-HPV-042 · 영향 접종 예정 120명 · 권장: △△의원에서 250도즈 재분배</p>
-              <div style="margin:16px 0;display:flex;flex-direction:column;gap:8px">
-                <label>담당자 <select style="width:100%;padding:6px"><option>김보건</option></select></label>
-                <label>조치 기한 <input type="date" value="2026-05-19" style="width:100%;padding:6px" /></label>
-                <label>메모 <textarea rows="3" style="width:100%;padding:8px;border:1px solid var(--rtmc-border);border-radius:6px" placeholder="0/500"></textarea></label>
-              </div>
-              <div style="font-size:12px;border-left:3px solid var(--rtmc-border);padding-left:12px">
-                <div>10:05 김보건 — 검토 시작</div>
-                <div>09:42 시스템 — 재분배 추천 연동</div>
-              </div>
-              <a class="btn btn-primary btn-sm" style="margin-top:12px" href="재분배-요청-상세.html">재분배 상세</a>
-            </div>
-          </div>
-        </div>
-        <div class="grid-2" style="margin-top:16px">
-          <div class="card"><div class="card-head"><h3>처리 단계</h3></div><div class="card-body"><p>신규 8 → 확인 10 → 처리 14 → 완료 25</p></div></div>
-          <div class="card"><div class="card-head"><h3>유형별 분포</h3></div><div class="card-body"><div class="chart-box" style="height:160px"><canvas id="alertType"></canvas></div></div></div>
-        </div>
-      </main>
-      <footer class="page-footer"><span>© RTMC VD-IMS</span></footer>
+<body data-rtmc-page="alerts">
+<header class="hdr">
+  <div class="logo"><svg viewBox="0 0 28 24" aria-hidden="true"><path d="M2 3c3 0 5 2 7 6l5 10 5-10c2-4 4-6 7-6" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg>VD-IMS</div>
+  <div class="notice"><span aria-hidden="true">📢</span><b>[공지]</b> 재고·유효기한·이상반응·데이터 미수신 통합 알림함</div>
+  <a class="bell" href="알림-조치-관리.html" aria-label="알림" style="display:inline-flex;align-items:center;text-decoration:none;color:inherit"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><i></i></a>
+  <div class="hsel"><strong>남동구보건소</strong> 예방접종 담당자 <span class="car">⌄</span></div>
+</header>
+<div class="shell">
+  <nav class="rail" aria-label="주 메뉴"><div class="rail-in" id="rtmc-rail"></div></nav>
+  <main class="main">
+    <div class="phead">
+      <div><div class="crumb">운영 · 알림·조치</div><h1>알림 / 조치 관리</h1><p class="pdesc">재고·유효기한·이상반응·데이터 미수신 통합 알림함</p></div>
+      <div class="qbar">
+        <button type="button" class="btn other-ol sm">확인 처리</button>
+        <button type="button" class="btn other-ol sm">담당자 지정</button>
+        <button type="button" class="btn sm">조치 등록</button>
+        <a class="btn other-ol sm" href="재분배-요청-상세.html">재분배 요청</a>
+      </div>
     </div>
-  </div>
-  <script>
-    if (typeof Chart !== "undefined") {
-      new Chart(document.getElementById("alertType"), {
-        type: "bar",
-        data: { labels: ["재고","유효기한","이상반응","미수신"], datasets: [{ data: [30, 23, 18, 12], backgroundColor: "#6366f1" }] },
-        options: { indexAxis: "y", responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-      });
-    }
-    var details = {
-      "1": "<h3 style='margin:0 0 8px'>HPV 재고 부족 · 구립○○병원</h3><p style='font-size:13px'>권장 재분배 250도즈</p><a class='btn btn-primary btn-sm' href='재분배-요청-상세.html'>재분배 상세</a>",
-      "2": "<h3 style='margin:0 0 8px'>이상반응 증가 · ○○내과</h3><p style='font-size:13px'>주간 +40% · <a href='이상반응-관리.html'>모니터링表</a></p>",
-      "3": "<h3 style='margin:0 0 8px'>데이터 미수신</h3><p style='font-size:13px'>연동 재시도 완료</p>"
-    };
-    document.querySelectorAll("#alertTable tbody tr").forEach(function (row) {
-      row.querySelectorAll("input, a, button").forEach(function (el) {
-        el.addEventListener("click", function (e) { e.stopPropagation(); });
-      });
-      row.addEventListener("click", function () {
-        document.querySelectorAll("#alertTable tbody tr").forEach(function (r) { r.style.background = ""; });
-        row.style.background = "#f9fafb";
-        document.getElementById("alertDetail").innerHTML = details[row.getAttribute("data-alert")] || "";
-      });
+    <section class="card filter-bar" style="display:grid">
+      <div class="filter-group"><label>유형</label><select class="field"><option>전체</option><option>재고 부족</option><option>이상반응</option></select></div>
+      <div class="filter-group"><label>심각도</label><select class="field"><option>전체</option></select></div>
+      <div class="filter-group"><label>상태</label><select class="field"><option>미확인</option><option>처리중</option></select></div>
+      <div class="filter-group"><label>기간</label><input class="field" type="date" value="2026-05-12" /> ~ <input class="field" type="date" value="2026-05-18" /></div>
+    </section>
+    <section class="kpis">
+      <div class="card kpi"><span class="l">전체 알림</span><span class="v num">47</span></div>
+      <div class="card kpi"><span class="l">미확인</span><span class="v num">8</span></div>
+      <div class="card kpi"><span class="l">처리중</span><span class="v num">14</span></div>
+      <div class="card kpi"><span class="l">완료</span><span class="v num">25</span></div>
+      <div class="card kpi"><span class="l">평균 처리</span><span class="v num">3h 42m</span></div>
+    </section>
+    <section class="split">
+      <div class="card sec">
+        <h2 class="ctitle">알림 목록</h2>
+        <div class="tw"><table class="data-table" id="alertTable"><thead><tr><th></th><th>유형</th><th>기관</th><th>발생</th><th>심각도</th><th>상태</th></tr></thead><tbody>
+          <tr data-alert="1" class="click" style="background:var(--pink100)"><td><input type="checkbox" /></td><td>재고 부족</td><td>구립○○병원</td><td>05-18 09:10</td><td><span class="tag tag-danger">상</span></td><td><span class="tag tag-warning">미확인</span></td></tr>
+          <tr data-alert="2" class="click"><td><input type="checkbox" /></td><td>이상반응 증가</td><td>○○내과</td><td>05-17 16:22</td><td><span class="tag tag-warning">중</span></td><td><span class="tag tag-primary">처리중</span></td></tr>
+          <tr data-alert="3" class="click"><td><input type="checkbox" /></td><td>데이터 미수신</td><td>□□ Clinic</td><td>05-17 08:00</td><td><span class="tag tag-muted">하</span></td><td><span class="tag tag-success">완료</span></td></tr>
+        </tbody></table></div>
+      </div>
+      <div class="card sec" id="alertDetail">
+        <h2 class="ctitle">조치 상세</h2>
+        <h3 class="st03">HPV 재고 부족 · 구립○○병원</h3>
+        <p class="b03" style="color:var(--grey700)">로트 L-HPV-042 · 영향 접종 예정 120명 · 권장: △△의원에서 250도즈 재분배</p>
+        <label class="flabel">담당자 <select class="field" style="width:100%;margin-top:6px"><option>김보건</option></select></label>
+        <label class="flabel" style="margin-top:12px;display:block">조치 기한 <input class="field" type="date" value="2026-05-19" style="width:100%;margin-top:6px" /></label>
+        <label class="flabel" style="margin-top:12px;display:block">메모 <textarea rows="3" class="field" style="width:100%;height:auto;padding:12px;margin-top:6px" placeholder="0/500"></textarea></label>
+        <div class="hint" style="border-left:3px solid var(--grey300);padding-left:12px;margin-top:16px">
+          <div>10:05 김보건 — 검토 시작</div>
+          <div>09:42 시스템 — 재분배 추천 연동</div>
+        </div>
+        <a class="btn sm" style="margin-top:12px" href="재분배-요청-상세.html">재분배 상세</a>
+      </div>
+    </section>
+    <section class="grid-2" style="margin-top:var(--gutter)">
+      <div class="card sec"><h2 class="ctitle">처리 단계</h2><p class="b03">신규 8 → 확인 10 → 처리 14 → 완료 25</p></div>
+      <div class="card sec"><h2 class="ctitle">유형별 분포</h2><div class="chart-box" style="height:160px"><canvas id="alertType"></canvas></div></div>
+    </section>
+    <footer class="page-foot"><span>© RTMC VD-IMS</span></footer>
+  </main>
+</div>
+<script src="rtmc-shell.js"></script>
+<script>
+(function () {
+  if (typeof Chart !== "undefined") {
+    new Chart(document.getElementById("alertType"), {
+      type: "bar",
+      data: { labels: ["재고", "유효기한", "이상반응", "미수신"], datasets: [{ data: [30, 23, 18, 12], backgroundColor: window.RTMCChart.purple }] },
+      options: { indexAxis: "y", responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } },
     });
-  </script>
+  }
+  var details = {
+    "1": "<h3 class='st03'>HPV 재고 부족 · 구립○○병원</h3><p class='b03'>권장 재분배 250도즈</p><a class='btn sm' href='재분배-요청-상세.html'>재분배 상세</a>",
+    "2": "<h3 class='st03'>이상반응 증가 · ○○내과</h3><p class='b03'>주간 +40% · <a href='이상반응-관리.html'>모니터링表</a></p>",
+    "3": "<h3 class='st03'>데이터 미수신</h3><p class='b03'>연동 재시도 완료</p>",
+  };
+  document.querySelectorAll("#alertTable tbody tr").forEach(function (row) {
+    row.querySelectorAll("input, a, button").forEach(function (el) {
+      el.addEventListener("click", function (e) { e.stopPropagation(); });
+    });
+    row.addEventListener("click", function () {
+      document.querySelectorAll("#alertTable tbody tr").forEach(function (r) { r.style.background = ""; });
+      row.style.background = "var(--pink100)";
+      document.getElementById("alertDetail").innerHTML = "<h2 class='ctitle'>조치 상세</h2>" + (details[row.getAttribute("data-alert")] || "");
+    });
+  });
+})();
+</script>
 </body>
 </html>

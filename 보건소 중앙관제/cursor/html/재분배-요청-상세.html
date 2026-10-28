@@ -1,86 +1,72 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" href="data:," />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>재분배 요청 상세 · VD-IMS</title>
-  <link rel="stylesheet" href="prototype-common.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/css/SpoqaHanSansNeo.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="rtmc-prototype.css">
+<link rel="stylesheet" href="rtmc-layout.css">
+<title>재분배 요청 상세 · VD-IMS</title>
 </head>
-<body>
-  <div class="app-shell">
-    <aside class="rail">
-      <div class="rail-logo">VD</div>
-      <nav class="rail-nav">
-        <a class="rail-link" href="통합-대시보드.html"><span class="rail-icon">📊</span>통합<br />대시보드</a>
-        <a class="rail-link" href="VD-IMS%20관할기관%20현황.html"><span class="rail-icon">🏥</span>관할<br />기관</a>
-        <a class="rail-link active" href="재고-관리.html"><span class="rail-icon">💉</span>재고<br />관리</a>
-        <a class="rail-link" href="이상반응-관리.html"><span class="rail-icon">⚠️</span>이상<br />반응</a>
-        <a class="rail-link" href="알림-조치-관리.html"><span class="rail-icon">🔔</span>알림<br />조치</a>
-      </nav>
-    </aside>
-    <div class="main-wrap">
-      <header class="top-header">
-        <div class="header-title">VD-IMS <span>/ 재분배 요청 상세</span></div>
-        <div class="header-actions"><div class="user-chip"><span class="avatar">김</span><strong>김보건</strong></div></div>
-      </header>
-      <main class="page-content">
-        <div class="breadcrumb"><a href="재고-관리.html">재고 관리</a> &gt; <a href="재고-관리.html#tab-redist">재분배 추천</a> &gt; 요청 상세</div>
-        <div class="page-head">
-          <div><h1>재분배 요청 상세</h1><p class="sub">TR-20260518-00034 · HPV · 검토 중</p></div>
-          <a class="btn btn-secondary btn-sm" href="재고-관리.html">목록으로</a>
-        </div>
-        <div class="stepper" aria-label="재분배 8단계">
-          <div class="step done"><div class="step-num">✓</div>추천 생성<br /><small>09:42</small></div>
-          <div class="step current"><div class="step-num">2</div>검토 중</div>
-          <div class="step"><div class="step-num">3</div>승인 대기</div>
-          <div class="step"><div class="step-num">4</div>승인 완료</div>
-          <div class="step"><div class="step-num">5</div>출고 요청</div>
-          <div class="step"><div class="step-num">6</div>출고 완료</div>
-          <div class="step"><div class="step-num">7</div>운송 중</div>
-          <div class="step"><div class="step-num">8</div>입고 완료</div>
-        </div>
-        <div class="grid-2-1">
-          <div>
-            <div class="card" style="margin-bottom:16px">
-              <div class="card-body">
-                <div class="flow-grid">
-                  <div class="flow-card">
-                    <strong>공급 · △△의원</strong>
-                    <p style="font-size:12px;margin:8px 0">현재 1,250 · 가용 950<br />담당 박○○ · 032-***-****</p>
-                  </div>
-                  <div class="flow-arrow">→<br /><strong style="font-size:18px">250 도즈</strong><br /><span style="font-size:11px">냉장 2–8℃ · 12.4km</span></div>
-                  <div class="flow-card">
-                    <strong>수령 · 구립○○병원</strong>
-                    <p style="font-size:12px;margin:8px 0">현재 85 · D+4 소진예상<br />담당 이○○</p>
-                  </div>
-                </div>
-                <p style="font-size:12px;color:var(--rtmc-muted);margin-top:12px">로트 L-HPV-042 · 유효 D+105 · 사유: 수요 불균형</p>
-              </div>
-            </div>
-            <div class="grid-2">
-              <div class="card"><div class="card-head"><h3>처리 이력</h3></div><div class="card-body"><table class="data-table"><tbody><tr><td>2026-05-18 09:42</td><td>시스템</td><td>재분배 추천 생성</td></tr><tr><td>2026-05-18 10:05</td><td>김보건</td><td>검토 시작</td></tr></tbody></table></div></div>
-              <div class="card"><div class="card-head"><h3>출고/입고 기록</h3></div><div class="card-body"><p style="color:var(--rtmc-muted);font-size:13px">출고 요청 후 등록됩니다.</p></div></div>
-            </div>
-            <div class="card" style="margin-top:16px"><div class="card-head"><h3>첨부/증빙</h3></div><div class="card-body"><p style="font-size:13px;border:2px dashed var(--rtmc-border);padding:24px;text-align:center;color:var(--rtmc-muted)">온도 기록 · 사진 · 서명 (드래그 업로드)</p></div></div>
-          </div>
-          <div class="card">
-            <div class="card-head"><h3>조치</h3></div>
-            <div class="card-body" style="display:flex;flex-direction:column;gap:8px">
-              <button type="button" class="btn btn-primary">승인</button>
-              <button type="button" class="btn btn-secondary">수량 수정</button>
-              <button type="button" class="btn btn-secondary">공급 기관 변경</button>
-              <button type="button" class="btn btn-secondary">출고 요청 발송</button>
-              <button type="button" class="btn btn-ghost">입고 확인</button>
-              <hr style="border:none;border-top:1px solid var(--rtmc-border)" />
-              <p style="font-size:12px;color:var(--rtmc-muted)">역할: 재고 담당 · 남동구보건소<br />최종 갱신 10:30</p>
-            </div>
-          </div>
-        </div>
-        <div class="policy-note">동일 백신·유효기한 확인 · 콜드체인 유지 · 모든 이동은 이력에 기록</div>
-      </main>
-      <footer class="page-footer"><span>© RTMC VD-IMS</span></footer>
+<body data-rtmc-page="stock">
+<header class="hdr">
+  <div class="logo"><svg viewBox="0 0 28 24" aria-hidden="true"><path d="M2 3c3 0 5 2 7 6l5 10 5-10c2-4 4-6 7-6" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg>VD-IMS</div>
+  <div class="notice"><span aria-hidden="true">📢</span><b>[공지]</b> 재분배 8단계 워크플로 (프로토타입)</div>
+  <div class="hsel"><strong>남동구보건소</strong> 예방접종 담당자 <span class="car">⌄</span></div>
+</header>
+<div class="shell">
+  <nav class="rail" aria-label="주 메뉴"><div class="rail-in" id="rtmc-rail"></div></nav>
+  <main class="main">
+    <div class="breadcrumb"><a href="재고-관리.html">재고 관리</a> &gt; <a href="재고-관리.html#tab-redist">재분배 추천</a> &gt; 요청 상세</div>
+    <div class="phead">
+      <div><h1>재분배 요청 상세</h1><p class="pdesc">TR-20260518-00034 · HPV · 검토 중</p></div>
+      <a class="btn other-ol sm" href="재고-관리.html">목록으로</a>
     </div>
-  </div>
+    <div class="stepper" aria-label="재분배 8단계">
+      <div class="step done"><div class="step-num">✓</div>추천 생성<br /><small>09:42</small></div>
+      <div class="step current"><div class="step-num">2</div>검토 중</div>
+      <div class="step"><div class="step-num">3</div>승인 대기</div>
+      <div class="step"><div class="step-num">4</div>승인 완료</div>
+      <div class="step"><div class="step-num">5</div>출고 요청</div>
+      <div class="step"><div class="step-num">6</div>출고 완료</div>
+      <div class="step"><div class="step-num">7</div>운송 중</div>
+      <div class="step"><div class="step-num">8</div>입고 완료</div>
+    </div>
+    <section class="split">
+      <div>
+        <div class="card sec" style="margin-bottom:var(--gutter)">
+          <div class="flow-grid">
+            <div class="flow-card"><strong>공급 · △△의원</strong><p class="b03" style="margin:8px 0">현재 1,250 · 가용 950<br />담당 박○○</p></div>
+            <div class="flow-arrow">→<br /><strong class="num">250 도즈</strong><br /><span class="hint">냉장 2–8℃ · 12.4km</span></div>
+            <div class="flow-card"><strong>수령 · 구립○○병원</strong><p class="b03" style="margin:8px 0">현재 85 · D+4 소진예상</p></div>
+          </div>
+          <p class="hint" style="margin-top:12px">로트 L-HPV-042 · 유효 D+105 · 사유: 수요 불균형</p>
+        </div>
+        <section class="grid-2">
+          <div class="card sec"><h2 class="ctitle">처리 이력</h2><div class="tw"><table class="data-table"><tbody><tr><td>2026-05-18 09:42</td><td>시스템</td><td>재분배 추천 생성</td></tr><tr><td>2026-05-18 10:05</td><td>김보건</td><td>검토 시작</td></tr></tbody></table></div></div>
+          <div class="card sec"><h2 class="ctitle">출고/입고 기록</h2><p class="b03" style="color:var(--grey600)">출고 요청 후 등록됩니다.</p></div>
+        </section>
+        <div class="card sec" style="margin-top:var(--gutter)"><h2 class="ctitle">첨부/증빙</h2><p class="b03" style="border:2px dashed var(--grey300);padding:24px;text-align:center;color:var(--grey600)">온도 기록 · 사진 · 서명 (드래그 업로드)</p></div>
+      </div>
+      <div class="card sec">
+        <h2 class="ctitle">조치</h2>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button type="button" class="btn">승인</button>
+          <button type="button" class="btn other">수량 수정</button>
+          <button type="button" class="btn other">공급 기관 변경</button>
+          <button type="button" class="btn other">출고 요청 발송</button>
+          <button type="button" class="btn ghost">입고 확인</button>
+          <hr style="border:none;border-top:1px solid var(--grey200)" />
+          <p class="hint">역할: 재고 담당 · 남동구보건소<br />최종 갱신 10:30</p>
+        </div>
+      </div>
+    </section>
+    <p class="policy-note">동일 백신·유효기한 확인 · 콜드체인 유지 · 모든 이동은 이력에 기록</p>
+    <footer class="page-foot"><span>© RTMC VD-IMS</span></footer>
+  </main>
+</div>
+<script src="rtmc-shell.js"></script>
 </body>
 </html>

@@ -1,88 +1,67 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" href="data:," />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>이상반응 관리 · VD-IMS</title>
-  <link rel="stylesheet" href="prototype-common.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/css/SpoqaHanSansNeo.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="rtmc-prototype.css">
+<link rel="stylesheet" href="rtmc-layout.css">
+<title>이상반응 관리 · VD-IMS</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
-<body>
-  <div class="app-shell">
-    <aside class="rail">
-      <div class="rail-logo">VD</div>
-      <nav class="rail-nav">
-        <a class="rail-link" href="통합-대시보드.html"><span class="rail-icon">📊</span>통합<br />대시보드</a>
-        <a class="rail-link" href="VD-IMS%20관할기관%20현황.html"><span class="rail-icon">🏥</span>관할<br />기관</a>
-        <a class="rail-link" href="재고-관리.html"><span class="rail-icon">💉</span>재고<br />관리</a>
-        <a class="rail-link active" href="이상반응-관리.html"><span class="rail-icon">⚠️</span>이상<br />반응</a>
-        <a class="rail-link" href="알림-조치-관리.html"><span class="rail-icon">🔔</span>알림<br />조치</a>
-      </nav>
-    </aside>
-    <div class="main-wrap">
-      <header class="top-header">
-        <div class="header-title">VD-IMS <span>/ 이상반응 관리</span></div>
-        <div class="header-search"><input type="search" placeholder="사례 ID·증상 검색" /></div>
-        <div class="header-actions"><div class="user-chip"><span class="avatar">김</span><strong>김보건</strong></div></div>
-      </header>
-      <main class="page-content">
-        <div class="page-head"><div><h1>이상반응 관리</h1><p class="sub">신고·모니터링 · 자가체크 4회(3·48·72·168h) · 의료진 심각도 참고 분류</p></div></div>
-        <div class="filter-bar">
-          <div class="filter-group"><label>기간</label><input type="date" value="2026-05-12" /> ~ <input type="date" value="2026-05-18" /></div>
-          <div class="filter-group"><label>백신</label><select><option>전체</option></select></div>
-          <div class="filter-group"><label>기관</label><select><option>관할 전체</option></select></div>
-          <button type="button" class="btn btn-ghost btn-sm">필터 초기화</button>
-        </div>
-        <div class="kpi-row">
-          <div class="kpi-card"><div class="label">총 신고(7일)</div><div class="value">18</div><div class="delta up">▲ 8.6%</div></div>
-          <div class="kpi-card"><div class="label">의료진 주의 사례</div><div class="value">3</div><div class="delta up">참고 분류 상위</div></div>
-          <div class="kpi-card"><div class="label">자가체크 응답률</div><div class="value">91.2%</div></div>
-          <div class="kpi-card"><div class="label">미응답</div><div class="value">12</div></div>
-          <div class="kpi-card"><div class="label">후속 조치 필요</div><div class="value">5</div></div>
-          <div class="kpi-card"><div class="label">KOI 상담 연계</div><div class="value">2</div><div class="delta neutral">상태값만 표시</div></div>
-        </div>
-        <div class="grid-3" style="margin-bottom:16px">
-          <div class="card"><div class="card-head"><h3>이상반응 추이</h3></div><div class="card-body"><div class="chart-box"><canvas id="aeTrend"></canvas></div></div></div>
-          <div class="card"><div class="card-head"><h3>증상별 분포</h3></div><div class="card-body"><div class="chart-box"><canvas id="aeSymptom"></canvas></div></div></div>
-          <div class="card"><div class="card-head"><h3>연령·성별</h3></div><div class="card-body"><div class="chart-box"><canvas id="aeDemo"></canvas></div></div></div>
-        </div>
-        <div class="card">
-          <div class="card-head"><h2>이상반응 사례 모니터링</h2><span class="tag tag-muted">Level 용어 비노출 · 의료진 UI</span></div>
-          <div class="card-body card-body--scroll" style="padding:0">
-            <table class="data-table data-table--wide">
-              <thead>
-                <tr>
-                  <th>사례 ID</th><th>기관</th><th>백신</th><th>증상</th><th>심각도(의료진 참고)</th><th>3h</th><th>48h</th><th>72h</th><th>168h</th><th>KOI 상태</th><th>담당</th><th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>AE-2026-0412</td><td>○○내과</td><td>HPV</td><td>두통·오한</td><td><span class="tag tag-warning">참고 B</span></td>
-                  <td>응답</td><td>응답</td><td>진행</td><td>—</td><td><span class="tag tag-primary">예약확정</span></td><td>김보건</td>
-                  <td><button type="button" class="btn btn-ghost btn-sm">보기</button></td>
-                </tr>
-                <tr>
-                  <td>AE-2026-0398</td><td>△△의원</td><td>독감</td><td>접종부 통증</td><td><span class="tag tag-muted">참고 A</span></td>
-                  <td>응답</td><td>응답</td><td>응답</td><td>응답</td><td>해당없음</td><td>—</td>
-                  <td><button type="button" class="btn btn-ghost btn-sm">보기</button></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <p class="policy-note">일반 접종자에게 AI 심각도 참고 분류 비공개 · 비대면 상담 상세는 KOI(새 탭) · VD-IMS는 KOI 상태값만 저장</p>
-      </main>
-      <footer class="page-footer"><span>갱신 2026-05-18 10:30</span><span>© RTMC VD-IMS</span></footer>
-    </div>
-  </div>
-  <script>
-    if (typeof Chart !== "undefined") {
-      var o = { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } };
-      new Chart(document.getElementById("aeTrend"), { type: "line", data: { labels: ["월","화","수","목","금","토","일"], datasets: [{ label: "신고", data: [2,3,2,4,2,2,3], borderColor: "#1e5eff" }, { label: "주의", data: [0,1,0,1,1,0,0], borderColor: "#e5484d" }] }, options: o });
-      new Chart(document.getElementById("aeSymptom"), { type: "doughnut", data: { labels: ["두통","근육통","발열","기타"], datasets: [{ data: [26,18,16,40], backgroundColor: ["#1e5eff","#6366f1","#f5a623","#d1d5db"] }] }, options: o });
-      new Chart(document.getElementById("aeDemo"), { type: "bar", data: { labels: ["10대","20–39","40–64","65+"], datasets: [{ label: "남", data: [1,4,2,1], backgroundColor: "#1e5eff" }, { label: "여", data: [2,5,2,1], backgroundColor: "#a5b4fc" }] }, options: o });
-    }
-  </script>
+<body data-rtmc-page="adverse">
+<header class="hdr">
+  <div class="logo"><svg viewBox="0 0 28 24" aria-hidden="true"><path d="M2 3c3 0 5 2 7 6l5 10 5-10c2-4 4-6 7-6" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg>VD-IMS</div>
+  <div class="notice"><span aria-hidden="true">📢</span><b>[공지]</b> 심각도는 의료진 참고 분류만 표시</div>
+  <a class="bell" href="알림-조치-관리.html" aria-label="알림" style="display:inline-flex;align-items:center;text-decoration:none;color:inherit"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><i></i></a>
+  <div class="hsel"><strong>남동구보건소</strong> 예방접종 담당자 <span class="car">⌄</span></div>
+</header>
+<div class="shell">
+  <nav class="rail" aria-label="주 메뉴"><div class="rail-in" id="rtmc-rail"></div></nav>
+  <main class="main">
+    <div class="phead"><div><div class="crumb">이상반응 관리</div><h1>이상반응 관리</h1><p class="pdesc">신고·모니터링 · 자가체크 4회(3·48·72·168h) · 의료진 심각도 참고 분류</p></div></div>
+    <section class="card filter-bar" style="display:grid">
+      <div class="filter-group"><label>기간</label><input class="field" type="date" value="2026-05-12" /> ~ <input class="field" type="date" value="2026-05-18" /></div>
+      <div class="filter-group"><label>백신</label><select class="field"><option>전체</option></select></div>
+      <div class="filter-group"><label>기관</label><select class="field"><option>관할 전체</option></select></div>
+      <div class="filter-actions"><button type="button" class="btn ghost sm">필터 초기화</button></div>
+    </section>
+    <section class="kpis">
+      <div class="card kpi"><span class="l">총 신고(7일)</span><span class="v num">18</span><span class="s up">▲ 8.6%</span></div>
+      <div class="card kpi"><span class="l">의료진 주의 사례</span><span class="v num">3</span><span class="s">참고 분류 상위</span></div>
+      <div class="card kpi"><span class="l">자가체크 응답률</span><span class="v num">91.2%</span></div>
+      <div class="card kpi"><span class="l">미응답</span><span class="v num">12</span></div>
+      <div class="card kpi"><span class="l">후속 조치 필요</span><span class="v num">5</span></div>
+      <div class="card kpi"><span class="l">KOI 상담 연계</span><span class="v num">2</span><span class="s">상태값만 표시</span></div>
+    </section>
+    <section class="lcol" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+      <div class="card card-pad"><h2 class="ctitle">이상반응 추이</h2><div class="chart-box"><canvas id="aeTrend"></canvas></div></div>
+      <div class="card card-pad"><h2 class="ctitle">증상별 분포</h2><div class="chart-box"><canvas id="aeSymptom"></canvas></div></div>
+      <div class="card card-pad"><h2 class="ctitle">연령·성별</h2><div class="chart-box"><canvas id="aeDemo"></canvas></div></div>
+    </section>
+    <section class="card sec">
+      <div class="card-head-row"><h2>이상반응 사례 모니터링</h2><span class="tag tag-muted">Level 용어 비노출 · 의료진 UI</span></div>
+      <div class="tw card-body--scroll"><table class="data-table data-table--wide"><thead><tr><th>사례 ID</th><th>기관</th><th>백신</th><th>증상</th><th>심각도(의료진 참고)</th><th>3h</th><th>48h</th><th>72h</th><th>168h</th><th>KOI 상태</th><th>담당</th></tr></thead><tbody>
+        <tr><td>AE-2026-0412</td><td>○○내과</td><td>HPV</td><td>두통·오한</td><td><span class="tag tag-warning">참고 B</span></td><td>응답</td><td>응답</td><td>진행</td><td>—</td><td><span class="tag tag-primary">예약확정</span></td><td>김보건</td></tr>
+        <tr><td>AE-2026-0398</td><td>△△의원</td><td>독감</td><td>접종부 통증</td><td><span class="tag tag-muted">참고 A</span></td><td>응답</td><td>응답</td><td>응답</td><td>응답</td><td>해당없음</td><td>—</td></tr>
+      </tbody></table></div>
+    </section>
+    <p class="policy-note">일반 접종자에게 AI 심각도 참고 분류 비공개 · 비대면 상담 상세는 KOI(새 탭) · VD-IMS는 KOI 상태값만 저장</p>
+    <footer class="page-foot"><span>갱신 2026-05-18 10:30</span><span>© RTMC VD-IMS</span></footer>
+  </main>
+</div>
+<script src="rtmc-shell.js"></script>
+<script>
+(function () {
+  if (typeof Chart === "undefined") return;
+  var C = window.RTMCChart;
+  var o = { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } };
+  new Chart(document.getElementById("aeTrend"), { type: "line", data: { labels: ["월", "화", "수", "목", "금", "토", "일"], datasets: [{ label: "신고", data: [2, 3, 2, 4, 2, 2, 3], borderColor: C.pink }, { label: "주의", data: [0, 1, 0, 1, 1, 0, 0], borderColor: C.error }] }, options: o });
+  new Chart(document.getElementById("aeSymptom"), { type: "doughnut", data: { labels: ["두통", "근육통", "발열", "기타"], datasets: [{ data: [26, 18, 16, 40], backgroundColor: [C.purple, C.pink, C.caution, C.grey] }] }, options: o });
+  new Chart(document.getElementById("aeDemo"), { type: "bar", data: { labels: ["10대", "20–39", "40–64", "65+"], datasets: [{ label: "남", data: [1, 4, 2, 1], backgroundColor: C.pink }, { label: "여", data: [2, 5, 2, 1], backgroundColor: C.pinkSoft }] }, options: o });
+})();
+</script>
 </body>
 </html>
